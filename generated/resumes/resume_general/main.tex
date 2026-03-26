@@ -1,0 +1,282 @@
+% !TEX root = main.tex
+%% ============================================================
+%% RESUME MAIN TEMPLATE
+%% ============================================================
+%% Jinja2 template — rendered by the auto resume generation pipeline.
+%% Delimiters:  variables VAROPEN VARCLOSE  |  blocks BLOCKOPEN BLOCKCLOSE
+%%
+%% TOP-LEVEL VARIABLES (from bullets.json profile):
+%%   candidate_name    string   : "Frank Shan"
+%%   email             string   : "g3shan@uwaterloo.ca"
+%%   phone             string   : "+1-263-881-6666"
+%%   linkedin_url      string
+%%   linkedin_handle   string
+%%   github_url        string
+%%   github_handle     string
+%%   portfolio_url     string   (optional)
+%%   portfolio_label   string   (optional)
+%%   highlights        object   : { summary }
+%%   education         list
+%%   experience        list
+%%   projects          list
+%%   skills            list
+%%   certificates      list
+%% ============================================================
+
+\documentclass[10pt, letterpaper]{article}
+
+% ── Packages ──────────────────────────────────────────────────
+\usepackage[
+    ignoreheadfoot,
+    top=1.25 cm,
+    bottom=1.25 cm,
+    left=1.5 cm,
+    right=1.5 cm,
+    footskip=1.0 cm,
+]{geometry}
+\usepackage{titlesec}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage[dvipsnames]{xcolor}
+\definecolor{primaryColor}{RGB}{0, 79, 144}
+\usepackage{enumitem}
+\usepackage{fontawesome5}
+\usepackage{amsmath}
+\usepackage[
+    pdftitle={Frank Shan's Resume},
+    pdfauthor={Frank Shan},
+    pdfcreator={LaTeX},
+    colorlinks=true,
+    urlcolor=primaryColor
+]{hyperref}
+\usepackage[pscoord]{eso-pic}
+\usepackage{calc}
+\usepackage{bookmark}
+\usepackage{lastpage}
+\usepackage{changepage}
+\usepackage{paracol}
+\usepackage{ifthen}
+\usepackage{needspace}
+\usepackage{iftex}
+
+% ATS parsability:
+\ifPDFTeX
+    \input{glyphtounicode}
+    \pdfgentounicode=1
+    \usepackage[utf8]{inputenc}
+    \usepackage{lmodern}
+\fi
+
+% ── Layout ────────────────────────────────────────────────────
+\AtBeginEnvironment{adjustwidth}{\partopsep0pt}
+\pagestyle{empty}
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\topskip}{0pt}
+\setlength{\columnsep}{0cm}
+
+\titleformat{\section}{\needspace{4\baselineskip}\large\scshape\raggedright}{}{0pt}{}
+[\vspace{1pt}\titlerule]
+\titlespacing{\section}{-1pt}{0.2 cm}{0.2 cm}
+
+\newenvironment{highlights}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=0.10 cm + 10pt
+    ]
+}{\end{itemize}}
+
+\newenvironment{highlightsforbulletentries}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=10pt
+    ]
+}{\end{itemize}}
+
+\newenvironment{onecolentry}{
+    \begin{adjustwidth}{0.2 cm + 0.00001 cm}{0.2 cm + 0.00001 cm}
+}{\end{adjustwidth}}
+
+\newenvironment{twocolentry}[2][]{
+    \onecolentry
+    \def\secondColumn{#2}
+    \setcolumnwidth{\fill, 4.5 cm}
+    \begin{paracol}{2}
+}{
+    \switchcolumn \raggedleft \secondColumn
+    \end{paracol}
+    \endonecolentry
+}
+
+\newenvironment{header}{
+    \setlength{\topsep}{0pt}\par\kern\topsep\centering\linespread{1.5}
+}{\par\kern\topsep}
+
+\let\hrefWithoutArrow\href
+\renewcommand{\href}[2]{\hrefWithoutArrow{#1}{\ifthenelse{\equal{#2}{}}{ }{#2 }\raisebox{.15ex}{\footnotesize \faExternalLink*}}}
+
+% ── Document ──────────────────────────────────────────────────
+\begin{document}
+    \newcommand{\AND}{\unskip
+        \cleaders\copy\ANDbox\hskip\wd\ANDbox
+        \ignorespaces
+    }
+    \newsavebox\ANDbox
+    \sbox\ANDbox{}
+
+    % ── Header ────────────────────────────────────────────────
+    \begin{header}
+        \textbf{\fontsize{24 pt}{24 pt}\selectfont Frank Shan}
+
+        \normalsize
+        \mbox{\hrefWithoutArrow{mailto:g3shan@uwaterloo.ca}{\color{black}{\footnotesize\faEnvelope[regular]}\hspace*{0.13cm}g3shan@uwaterloo.ca}}%
+        \kern 0.25 cm%
+        \AND%
+        \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{tel:+1-263-881-6666}{\color{black}{\footnotesize\faPhone*}\hspace*{0.13cm}+1-263-881-6666}}%
+        \kern 0.25 cm%
+        \AND%
+        \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{https://linkedin.com/in/frank-shan}{\color{black}{\footnotesize\faLinkedinIn}\hspace*{0.13cm}frank-shan}}%
+        \kern 0.25 cm%
+        \AND%
+        \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{https://github.com/knarfthekant}{\color{black}{\footnotesize\faGithub}\hspace*{0.13cm}knarfthekant}}%
+        \kern 0.25 cm%
+        \AND%
+        \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{https://frank-shan.vercel.app}{\color{black}{\footnotesize\faGlobe}\hspace*{0.13cm}portfolio}}%
+        \kern 0.25 cm%
+    \end{header}
+
+    \vspace{0.2 cm - 0.2 cm}
+
+    % ── Highlights ────────────────────────────────────────────
+    \section{Highlights}
+
+    \begin{onecolentry}
+        \begin{highlightsforbulletentries}
+
+        \item \textbf{Full-stack} developer specialized in translating \textbf{business requirements into production-ready} systems. Shipped a complete product in under 3 months. Expert in \textbf{building MVP} rapidly using coding agents.
+
+        \end{highlightsforbulletentries}
+    \end{onecolentry}
+
+    % ── Education ─────────────────────────────────────────────
+    \section{Education}
+
+    \hspace{0.5em} \textbf{University of Waterloo} \textbar\ \textit{CGPA: 92.3/100} \hfill \textit{Sep 2024 - Apr 2029}
+
+    \hspace{0.5em} \textit{Bachelor of Computer Science, Honours Computer Science, AI Specialization}
+
+    \vspace{0.10 cm}
+
+
+    % ── Experience ────────────────────────────────────────────
+    \section{Experience}
+
+    \begin{twocolentry}{
+
+    \textit{Sep 2025 -- Apr 2026}}
+        \textbf{Software Developer Intern} \textbar\ \textit{Richmond, BC}
+        
+        \textit{Ziyutec Inc.}
+    \end{twocolentry}
+
+    \vspace{0.10 cm}
+    \begin{onecolentry}
+        \begin{highlights}
+        \item \textbf{Owned} the end-to-end planning and development of a \hrefWithoutArrow{https://neshub.net}{global B2B marketplace} for a startup initiative, \textbf{leading} system design, implementation, and deployment (AWS) across the \textbf{entire SDLC}.
+        \item Architected a Role-Based Access Control framework (NestJS, PostgreSQL) to support extensible user roles; balanced database \textbf{normalization} against \textbf{query performance} via denormalization and data \textbf{integrity} checks.
+        \item Engineered a \textbf{caching} layer to decouple client-side state from \textbf{atomic} database transactions, reducing \textbf{user friction} while ensuring transactional integrity.
+        \item Built an automation agent for engineering workflow, reducing operational workload by \textbf{20\%} across a \textbf{50-person} engineering team.
+        \item Built a \textbf{RAG agent}, indexing \textbf{500+ enterprise documents} of different format; improved \textbf{contextual relevance by 16\%} (DeepEval) via \textbf{hybrid search and reranking} on synthetically generated evaluation set.
+        \item Maintained and enhanced a \textbf{multi-tenant} ERP platform comprising \textbf{60K+ lines of legacy code}, supporting \textbf{1,000+ active projects}. Resolved a \textbf{long-standing} session management defect by implementing \textbf{JWT refresh token rotation}, eliminating form data loss.
+        \end{highlights}
+    \end{onecolentry}
+    \vspace{0.2cm}
+    \begin{twocolentry}{
+
+    \textit{Feb 2026 -- Present}}
+        \textbf{Research Assistant} \textbar\ \textit{Waterloo, ON}
+        
+        \textit{University of Waterloo}
+    \end{twocolentry}
+
+    \vspace{0.10 cm}
+    \begin{onecolentry}
+        \begin{highlights}
+        \item Designed comparative experiments for a probabilistic programming language PAL that compiles structural rules into tensor operations. Built a \textbf{hybrid neuro-symbolic} framework for training Named Entity Recognition models to enforce strict linguistic constraints and improve early-epoch model convergence.
+        \end{highlights}
+    \end{onecolentry}
+
+    % ── Projects ──────────────────────────────────────────────
+    \section{Projects}
+
+    \hspace{0.5em} \textbf{Compact Vision-Language Model} \textbar \  \textit{PyTorch, Transformers}
+    \hfill \textit{\href{https://github.com/knarfthekant/mini-vlm}{github}}
+
+    \vspace{0.10 cm}
+    \begin{onecolentry}
+        \begin{highlights}
+            \item Built a LLaVA style \textbf{Vision-Language Model}, fusing a \textbf{SigLIP-2} vision encoder with \textbf{Qwen3-0.6B} via a pixel-shuffle modality projector; achieved \textbf{32.9\% zero-shot accuracy on MMStar}.
+            \item Designed a high-throughput training pipeline with a \textbf{greedy knapsack} batching strategy to maximize token-level GPU utilization, enabling efficient multimodal pretraining at \textbf{consumer-scale hardware}.
+        \end{highlights}
+    \end{onecolentry}
+    \vspace{0.10 cm}
+
+    \hspace{0.5em} \textbf{High Throughput LLM Inference Engine} \textbar \  \textit{PyTorch}
+    \hfill \textit{\href{https://github.com/knarfthekant/mini-vllm}{github}}
+
+    \vspace{0.10 cm}
+    \begin{onecolentry}
+        \begin{highlights}
+            \item Built a LLM \textbf{inference engine from scratch}, featuring continuous batching, scheduler-driven execution, and pluggable dense/paged KV-cache backends, with \textbf{prefix caching} for efficient memory reuse.
+            \item Designed a ShareGPT-based \textbf{benchmarking} pipeline and demonstrated up to \textbf{59\% higher request throughput} and significantly lower TTFT with paged attention.
+        \end{highlights}
+    \end{onecolentry}
+    \vspace{0.10 cm}
+
+
+    % ── Skills ────────────────────────────────────────────────
+    \section{Skills}
+
+    \begin{onecolentry}
+        \textbf{Programming Languages:} <built-in method items of dict object at 0x1069ea1c0>
+    \end{onecolentry}
+
+    \vspace{0.05 cm}
+
+    \begin{onecolentry}
+        \textbf{Frameworks:} <built-in method items of dict object at 0x1069f8f80>
+    \end{onecolentry}
+
+    \vspace{0.05 cm}
+
+    \begin{onecolentry}
+        \textbf{Tools:} <built-in method items of dict object at 0x1069e9a80>
+    \end{onecolentry}
+
+    \vspace{0.05 cm}
+
+
+    % ── Professional Certificates ─────────────────────────────
+    \section{Professional Certificates}
+
+    \begin{twocolentry}{
+    
+    \textit{December 2025}\\
+    \mbox{\href{https://digitalcredential.stanford.edu/check/0A1B9763B9AF3F624A5B77F09AAE2269D7938516385DE431DBF4D7667844CA8EYmVQcjFIZVZSc1lFTDRiVC9DeUlaa1ZOcnRxQVIrMVJFeHR1cTJOY0NNREFVUWJC}{Certificate of Achievement}}}
+        \textbf{XCS224N, Stanford Online}
+        
+        \textit{Natural Language Processing with Deep Learning}
+    
+    \end{twocolentry}
+
+\end{document}

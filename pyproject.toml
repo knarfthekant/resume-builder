@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "resume-builder"
+version = "0.1.0"
+description = "Minimal modular resume generator for Jinja2 + LaTeX templates."
+readme = "readme.md"
+requires-python = ">=3.11"
+dependencies = [
+  "jinja2>=3.1,<4.0",
+  "PyYAML>=6.0,<7.0",
+  "textual>=0.58",
+]
+
+[project.scripts]
+resume-builder = "app.cli:main"
+
+[tool.setuptools]
+packages = ["app"]

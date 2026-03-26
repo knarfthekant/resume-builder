@@ -1,0 +1,15 @@
+summary:
+  general: >
+    \textbf{Full-stack} developer specialized in translating \textbf{business requirements into production-ready}
+    systems.
+experience:
+  ziyutec:
+    - Led marketplace architecture, implementation, and deployment across the full SDLC.
+    - Built workflow automation that reduced operational overhead for a 50-person engineering team.
+    - Implemented RAG pipelines and hybrid retrieval to improve enterprise document search quality.
+  uw_research:
+    - Built neuro-symbolic NER experiments to enforce linguistic constraints during model training.
+projects:
+  resume_generator:
+    - Built a modular YAML to Jinja2 to LaTeX pipeline.
+    - Added a Textual UI for config editing and resume generation.

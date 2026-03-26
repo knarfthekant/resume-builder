@@ -1,0 +1,6 @@
+template_root: /Users/frankshan/Desktop/Job Application/workspace/templates/resume
+data_root: /Users/frankshan/Desktop/Job Application/workspace/data
+output_root: /Users/frankshan/Desktop/Job Application/workspace/generated/resumes
+active_profile: profiles/general.yaml
+active_bullets_catalog: bullets/general.yaml
+compile_pdf: true

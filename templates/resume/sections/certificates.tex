@@ -1,0 +1,21 @@
+%% SECTION: Professional Certificates
+%% Variables:
+%%   certificates - list of objects:
+%%     .date         - string: e.g. "December 2025"
+%%     .cert_url     - string (optional): URL to digital credential
+%%     .cert_label   - string (optional): e.g. "Certificate of Achievement"
+%%     .issuer       - string: e.g. "XCS224N, Stanford Online"
+%%     .name         - string: certificate/course name
+\section{Professional Certificates}
+
+<< for cert in certificates >>
+    \begin{twocolentry}{
+    
+    \textit{<< cert.date >>}\\
+    << if cert.cert_url >>\mbox{\href{<< cert.cert_url >>}{<< cert.cert_label >>}}<< endif >>}
+        \textbf{<< cert.issuer >>}
+        
+        \textit{<< cert.name >>}
+    
+    \end{twocolentry}
+<< endfor >>

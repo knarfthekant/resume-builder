@@ -1,0 +1,25 @@
+%% SECTION: Projects
+%% Variables:
+%%   projects - list of objects:
+%%     .name         - string: project name
+%%     .tech_stack   - string: e.g. "PyTorch, Transformers"
+%%     .link_url     - string (optional): URL to repo/writeup
+%%     .link_label   - string (optional): e.g. "github"
+%%     .highlights   - list of strings: bullet points
+\section{Projects}
+
+<< for project in projects >>
+    \hspace{0.5em} \textbf{<< project.name >>} \textbar \  \textit{<< project.tech_stack >>}
+    << if project.link_url >>\hfill \textit{\href{<< project.link_url >>}{<< project.link_label >>}}<< endif >>
+
+    \vspace{0.10 cm}
+    \begin{onecolentry}
+        \begin{highlights}
+            << for bullet in project.highlights >>
+            \item << bullet >>
+            << endfor >>
+        \end{highlights}
+    \end{onecolentry}
+    \vspace{0.10 cm}
+
+<< endfor >>

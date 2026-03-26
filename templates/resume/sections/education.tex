@@ -1,0 +1,16 @@
+%% SECTION: Education
+%% Variables:
+%%   education - list of objects:
+%%     .institution  - string: school/university name
+%%     .gpa          - string (optional): e.g. "CGPA: 92.3/100"
+%%     .date_range   - string: e.g. "Sep 2024 - Apr 2029"
+%%     .degree       - string: full degree name / specialization
+<< "\\section{Education}" >>
+
+<< for edu in education >>
+    \hspace{0.5em} \textbf{<< edu.institution >>}<< " \\textbar\\ \\textit{" + edu.gpa + "}" if edu.gpa else "" >> \hfill \textit{<< edu.date_range >>}
+
+    \hspace{0.5em} \textit{<< edu.degree >>}
+
+    \vspace{0.10 cm}
+<< endfor >>

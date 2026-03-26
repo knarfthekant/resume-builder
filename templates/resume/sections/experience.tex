@@ -1,0 +1,31 @@
+%% SECTION: Experience
+%% Variables:
+%%   experience - list of objects:
+%%     .title        - string: job title, e.g. "Software Developer Intern"
+%%     .location     - string: e.g. "Richmond, BC"
+%%     .date_range   - string: e.g. "Sep 2025 – Apr 2026"
+%%     .company      - string: company/institution name
+%%     .highlights   - list of strings: bullet points
+\section{Experience}
+
+<< for i, job in enumerate(experience) >>
+    \begin{twocolentry}{
+
+    \textit{<< job.date_range >>}}
+        \textbf{<< job.title >>} \textbar\ \textit{<< job.location >>}
+        
+        \textit{<< job.company >>}
+    \end{twocolentry}
+
+    \vspace{0.10 cm}
+    \begin{onecolentry}
+        \begin{highlights}
+    
+    << for bullet in job.highlights >>
+    \item << bullet >>
+    << endfor >>
+        
+        \end{highlights}
+    \end{onecolentry}
+<< if not loop.last >>\vspace{0.2cm}<< endif >>
+<< endfor >>
