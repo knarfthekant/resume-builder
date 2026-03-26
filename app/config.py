@@ -18,8 +18,11 @@ def default_config() -> AppConfig:
         data_root=PROJECT_ROOT / "data",
         output_root=PROJECT_ROOT / "generated" / "resumes",
         active_profile="profiles/general.yaml",
-        active_bullets_catalog="bullets/general.yaml",
+        active_bullet_library="bullets/general.yaml",
         compile_pdf=True,
+        openrouter_model="openai/gpt-5.4-mini",
+        openrouter_base_url="https://openrouter.ai/api/v1",
+        setup_completed=False,
     )
 
 
@@ -38,25 +41,21 @@ def _serialize_config(config: AppConfig) -> dict[str, Any]:
 
 
 def validate_config(data: dict[str, Any], *, base_dir: Path) -> AppConfig:
-    required = {
-        "template_root",
-        "data_root",
-        "output_root",
-        "active_profile",
-        "active_bullets_catalog",
-        "compile_pdf",
-    }
-    missing = sorted(required - set(data))
-    if missing:
-        raise ValueError(f"Missing config keys: {', '.join(missing)}")
+    defaults = _serialize_config(default_config())
+    merged = {**defaults, **data}
+    if "active_bullets_catalog" in merged and "active_bullet_library" not in data:
+        merged["active_bullet_library"] = merged["active_bullets_catalog"]
 
     return AppConfig(
-        template_root=_normalize_path(data["template_root"], base=base_dir),
-        data_root=_normalize_path(data["data_root"], base=base_dir),
-        output_root=_normalize_path(data["output_root"], base=base_dir),
-        active_profile=str(data["active_profile"]),
-        active_bullets_catalog=str(data["active_bullets_catalog"]),
-        compile_pdf=bool(data["compile_pdf"]),
+        template_root=_normalize_path(merged["template_root"], base=base_dir),
+        data_root=_normalize_path(merged["data_root"], base=base_dir),
+        output_root=_normalize_path(merged["output_root"], base=base_dir),
+        active_profile=str(merged["active_profile"]),
+        active_bullet_library=str(merged["active_bullet_library"]),
+        compile_pdf=bool(merged["compile_pdf"]),
+        openrouter_model=str(merged["openrouter_model"]),
+        openrouter_base_url=str(merged["openrouter_base_url"]),
+        setup_completed=bool(merged["setup_completed"]),
     )
 
 

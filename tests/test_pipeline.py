@@ -19,7 +19,7 @@ class PipelineTests(unittest.TestCase):
 
             self.assertTrue(result.output_dir.exists())
             self.assertTrue(result.rendered_main.exists())
-            self.assertTrue(result.rendered_main.name == "main.tex")
+            self.assertEqual(result.rendered_main.name, "main.tex")
             self.assertTrue((result.output_dir / "sections" / "education.tex").exists())
             self.assertIsNone(result.pdf_path)
 
@@ -28,7 +28,7 @@ class PipelineTests(unittest.TestCase):
             config = default_config()
             config.output_root = Path(temp_dir)
             result = ResumePipeline(config).run()
-            self.assertTrue(result.pdf_path is not None)
+            self.assertIsNotNone(result.pdf_path)
             assert result.pdf_path is not None
             self.assertTrue(result.pdf_path.exists())
 

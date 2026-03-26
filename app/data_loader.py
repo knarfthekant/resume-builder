@@ -6,12 +6,12 @@ from typing import Any
 import yaml
 
 from app.models import (
-    BulletCatalog,
+    BulletLibrary,
+    BulletOption,
     CertificateEntry,
     EducationEntry,
-    ExperienceEntry,
-    Highlights,
-    ProjectEntry,
+    ExperienceEntryDefinition,
+    ProjectEntryDefinition,
     ResumeProfile,
     SkillGroup,
 )
@@ -41,6 +41,13 @@ def _optional_string(data: dict[str, Any], key: str) -> str:
     return value
 
 
+def _require_int(data: dict[str, Any], key: str, *, context: str) -> int:
+    value = data.get(key)
+    if not isinstance(value, int) or value < 0:
+        raise ValueError(f"Expected non-negative integer for '{key}' in {context}")
+    return value
+
+
 def _list_of_dicts(value: Any, *, key: str, context: str) -> list[dict[str, Any]]:
     if value is None:
         return []
@@ -57,16 +64,20 @@ def _list_of_strings(value: Any, *, key: str, context: str) -> list[str]:
     return value
 
 
+def _ensure_unique_ids(options: list[BulletOption], *, context: str) -> None:
+    seen: set[str] = set()
+    duplicates: list[str] = []
+    for option in options:
+        if option.id in seen:
+            duplicates.append(option.id)
+        seen.add(option.id)
+    if duplicates:
+        raise ValueError(f"Duplicate bullet ids in {context}: {', '.join(sorted(set(duplicates)))}")
+
+
 def load_resume_profile(path: Path) -> ResumeProfile:
     raw = _read_yaml(path)
     context = str(path)
-
-    highlights_data = raw.get("highlights")
-    highlights = None
-    if highlights_data:
-        if not isinstance(highlights_data, dict):
-            raise ValueError(f"Expected mapping for 'highlights' in {context}")
-        highlights = Highlights(summary=_require_string(highlights_data, "summary", context=context))
 
     education = [
         EducationEntry(
@@ -76,28 +87,6 @@ def load_resume_profile(path: Path) -> ResumeProfile:
             gpa=_optional_string(item, "gpa"),
         )
         for item in _list_of_dicts(raw.get("education"), key="education", context=context)
-    ]
-
-    experience = [
-        ExperienceEntry(
-            title=_require_string(item, "title", context=context),
-            location=_require_string(item, "location", context=context),
-            date_range=_require_string(item, "date_range", context=context),
-            company=_require_string(item, "company", context=context),
-            highlights=_list_of_strings(item.get("highlights"), key="highlights", context=context),
-        )
-        for item in _list_of_dicts(raw.get("experience"), key="experience", context=context)
-    ]
-
-    projects = [
-        ProjectEntry(
-            name=_require_string(item, "name", context=context),
-            tech_stack=_require_string(item, "tech_stack", context=context),
-            highlights=_list_of_strings(item.get("highlights"), key="highlights", context=context),
-            link_url=_optional_string(item, "link_url"),
-            link_label=_optional_string(item, "link_label"),
-        )
-        for item in _list_of_dicts(raw.get("projects"), key="projects", context=context)
     ]
 
     skills = [
@@ -119,7 +108,31 @@ def load_resume_profile(path: Path) -> ResumeProfile:
         for item in _list_of_dicts(raw.get("certificates"), key="certificates", context=context)
     ]
 
-    return ResumeProfile(
+    experience_entries = [
+        ExperienceEntryDefinition(
+            id=_require_string(item, "id", context=context),
+            title=_require_string(item, "title", context=context),
+            location=_require_string(item, "location", context=context),
+            date_range=_require_string(item, "date_range", context=context),
+            company=_require_string(item, "company", context=context),
+            max_bullets=_require_int(item, "max_bullets", context=context),
+        )
+        for item in _list_of_dicts(raw.get("experience_entries"), key="experience_entries", context=context)
+    ]
+
+    project_entries = [
+        ProjectEntryDefinition(
+            id=_require_string(item, "id", context=context),
+            name=_require_string(item, "name", context=context),
+            tech_stack=_require_string(item, "tech_stack", context=context),
+            max_bullets=_require_int(item, "max_bullets", context=context),
+            link_url=_optional_string(item, "link_url"),
+            link_label=_optional_string(item, "link_label"),
+        )
+        for item in _list_of_dicts(raw.get("project_entries"), key="project_entries", context=context)
+    ]
+
+    profile = ResumeProfile(
         candidate_name=_require_string(raw, "candidate_name", context=context),
         email=_require_string(raw, "email", context=context),
         phone=_require_string(raw, "phone", context=context),
@@ -129,42 +142,63 @@ def load_resume_profile(path: Path) -> ResumeProfile:
         github_handle=_require_string(raw, "github_handle", context=context),
         portfolio_url=_optional_string(raw, "portfolio_url"),
         portfolio_label=_optional_string(raw, "portfolio_label"),
-        highlights=highlights,
         education=education,
-        experience=experience,
-        projects=projects,
         skills=skills,
         certificates=certificates,
+        experience_entries=experience_entries,
+        project_entries=project_entries,
     )
+    _ensure_unique_entry_ids(profile, context=context)
+    return profile
 
 
-def load_bullet_catalog(path: Path) -> BulletCatalog:
+def _load_bullet_options(value: Any, *, key: str, context: str) -> list[BulletOption]:
+    items = _list_of_dicts(value, key=key, context=context)
+    options = [
+        BulletOption(
+            id=_require_string(item, "id", context=context),
+            text=_require_string(item, "text", context=context),
+            tags=_list_of_strings(item.get("tags"), key="tags", context=context),
+            evidence=_optional_string(item, "evidence"),
+        )
+        for item in items
+    ]
+    _ensure_unique_ids(options, context=f"{context}:{key}")
+    return options
+
+
+def _ensure_unique_entry_ids(profile: ResumeProfile, *, context: str) -> None:
+    experience_ids = [entry.id for entry in profile.experience_entries]
+    project_ids = [entry.id for entry in profile.project_entries]
+    if len(set(experience_ids)) != len(experience_ids):
+        raise ValueError(f"Duplicate experience entry ids in {context}")
+    if len(set(project_ids)) != len(project_ids):
+        raise ValueError(f"Duplicate project entry ids in {context}")
+
+
+def load_bullet_library(path: Path) -> BulletLibrary:
     raw = _read_yaml(path)
     context = str(path)
 
-    def normalize_mapping_of_lists(key: str) -> dict[str, list[str]]:
-        section = raw.get(key, {})
-        if section is None:
-            return {}
-        if not isinstance(section, dict):
-            raise ValueError(f"Expected mapping for '{key}' in {context}")
-        normalized: dict[str, list[str]] = {}
-        for name, items in section.items():
-            if not isinstance(name, str):
-                raise ValueError(f"Expected string keys in '{key}' in {context}")
-            normalized[name] = _list_of_strings(items, key=key, context=context)
-        return normalized
+    experience = raw.get("experience", {})
+    if not isinstance(experience, dict):
+        raise ValueError(f"Expected mapping for 'experience' in {context}")
+    project_section = raw.get("projects", {})
+    if not isinstance(project_section, dict):
+        raise ValueError(f"Expected mapping for 'projects' in {context}")
 
-    summary = raw.get("summary", {})
-    if summary is None:
-        summary = {}
-    if not isinstance(summary, dict) or any(not isinstance(k, str) or not isinstance(v, str) for k, v in summary.items()):
-        raise ValueError(f"Expected string mapping for 'summary' in {context}")
-
-    return BulletCatalog(
-        experience=normalize_mapping_of_lists("experience"),
-        projects=normalize_mapping_of_lists("projects"),
-        summary=summary,
+    return BulletLibrary(
+        summary_options=_load_bullet_options(raw.get("summary_options"), key="summary_options", context=context),
+        experience={
+            key: _load_bullet_options(value, key=key, context=context)
+            for key, value in experience.items()
+            if isinstance(key, str)
+        },
+        projects={
+            key: _load_bullet_options(value, key=key, context=context)
+            for key, value in project_section.items()
+            if isinstance(key, str)
+        },
     )
 
 

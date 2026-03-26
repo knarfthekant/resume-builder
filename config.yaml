@@ -2,5 +2,8 @@ template_root: /Users/frankshan/Desktop/Job Application/workspace/templates/resu
 data_root: /Users/frankshan/Desktop/Job Application/workspace/data
 output_root: /Users/frankshan/Desktop/Job Application/workspace/generated/resumes
 active_profile: profiles/general.yaml
-active_bullets_catalog: bullets/general.yaml
+active_bullet_library: bullets/general.yaml
 compile_pdf: true
+openrouter_model: openai/gpt-5.4-mini
+openrouter_base_url: https://openrouter.ai/api/v1
+setup_completed: true

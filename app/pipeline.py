@@ -5,30 +5,34 @@ from pathlib import Path
 
 from app.compiler import compile_latex
 from app.config import load_config
-from app.data_loader import load_bullet_catalog, load_resume_profile
+from app.data_loader import load_bullet_library, load_resume_profile
 from app.models import AppConfig, GenerationResult, PipelineRequest
-from app.renderer import render_main_template
-from app.selector import ContentSelector, StaticContentSelector
+from app.selection import ManualSelectionService, SelectionApplier
 
 
 class ResumePipeline:
-    def __init__(self, config: AppConfig, selector: ContentSelector | None = None) -> None:
+    def __init__(self, config: AppConfig) -> None:
         self.config = config
-        self.selector = selector or StaticContentSelector()
+        self.manual_selection = ManualSelectionService()
+        self.selection_applier = SelectionApplier()
 
     def run(self, request: PipelineRequest | None = None) -> GenerationResult:
         request = request or PipelineRequest()
         profile_rel = request.profile_name or self.config.active_profile
-        bullets_rel = request.bullets_catalog_name or self.config.active_bullets_catalog
+        bullet_library_rel = request.bullet_library_name or self.config.active_bullet_library
         compile_pdf_enabled = self.config.compile_pdf if request.compile_pdf is None else request.compile_pdf
 
         profile_path = self.config.data_root / profile_rel
-        bullets_path = self.config.data_root / bullets_rel
-        profile_data = load_resume_profile(profile_path)
-        bullets_data = load_bullet_catalog(bullets_path)
-        render_context = self.selector.select(profile_data, bullets_data, job_description=request.job_description)
+        bullet_library_path = self.config.data_root / bullet_library_rel
+        profile = load_resume_profile(profile_path)
+        bullet_library = load_bullet_library(bullet_library_path)
+
+        selection = request.selection or self.manual_selection.build_default_selection(profile, bullet_library)
+        render_context = self.selection_applier.build_render_context(profile, bullet_library, selection)
 
         output_dir = self._create_output_dir()
+        from app.renderer import render_main_template
+
         rendered_main = render_main_template(self.config.template_root, output_dir, render_context)
 
         pdf_path = None

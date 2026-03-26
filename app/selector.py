@@ -1,38 +1,16 @@
 from __future__ import annotations
 
-from dataclasses import asdict
-
-from app.models import BulletCatalog, ResumeProfile
-
-
-class ContentSelector:
-    """Seam for future AI-driven bullet selection."""
-
-    def select(
-        self,
-        profile_data: ResumeProfile,
-        bullets_data: BulletCatalog,
-        job_description: str | None = None,
-    ) -> dict:
-        raise NotImplementedError
+from app.models import BulletLibrary, ResumeProfile, ResumeSelection
+from app.selection import ManualSelectionService, SelectionApplier
 
 
-class StaticContentSelector(ContentSelector):
-    """v1 selector: return the profile as-is while keeping future hooks explicit."""
+class ManualSelectionServiceAdapter:
+    """Compatibility wrapper around the new manual selection path."""
 
-    def select(
-        self,
-        profile_data: ResumeProfile,
-        bullets_data: BulletCatalog,
-        job_description: str | None = None,
-    ) -> dict:
-        render_context = asdict(profile_data)
-        render_context["_selection_metadata"] = {
-            "job_description_provided": bool(job_description),
-            "catalog_sections": {
-                "experience": len(bullets_data.experience),
-                "projects": len(bullets_data.projects),
-                "summary": len(bullets_data.summary),
-            },
-        }
-        return render_context
+    def __init__(self) -> None:
+        self._manual = ManualSelectionService()
+        self._applier = SelectionApplier()
+
+    def select(self, profile: ResumeProfile, library: BulletLibrary, selection: ResumeSelection | None = None) -> dict:
+        active_selection = selection or self._manual.build_default_selection(profile, library)
+        return self._applier.build_render_context(profile, library, active_selection)

@@ -7,67 +7,18 @@ github_url: https://github.com/knarfthekant
 github_handle: knarfthekant
 portfolio_url: https://frank-shan.vercel.app
 portfolio_label: portfolio
-highlights:
-  summary: >
-    \textbf{Full-stack} developer specialized in translating \textbf{business requirements into production-ready}
-    systems. Shipped a complete product in under 3 months. Expert in \textbf{building MVP} rapidly using coding agents.
 education:
   - institution: University of Waterloo
-    gpa: "CGPA: 92.3/100"
-    date_range: Sep 2024 - Apr 2029
     degree: Bachelor of Computer Science, Honours Computer Science, AI Specialization
-experience:
-  - title: Software Developer Intern
-    location: Richmond, BC
-    date_range: Sep 2025 -- Apr 2026
-    company: Ziyutec Inc.
-    highlights:
-      - >
-        \textbf{Owned} the end-to-end planning and development of a \hrefWithoutArrow{https://neshub.net}{global B2B marketplace}
-        for a startup initiative, \textbf{leading} system design, implementation, and deployment (AWS) across the \textbf{entire SDLC}.
-      - >
-        Architected a Role-Based Access Control framework (NestJS, PostgreSQL) to support extensible user roles; balanced database
-        \textbf{normalization} against \textbf{query performance} via denormalization and data \textbf{integrity} checks.
-      - >
-        Engineered a \textbf{caching} layer to decouple client-side state from \textbf{atomic} database transactions, reducing
-        \textbf{user friction} while ensuring transactional integrity.
-      - >
-        Built an automation agent for engineering workflow, reducing operational workload by \textbf{20\%} across a \textbf{50-person}
-        engineering team.
-      - >
-        Built a \textbf{RAG agent}, indexing \textbf{500+ enterprise documents} of different format; improved \textbf{contextual relevance
-        by 16\%} (DeepEval) via \textbf{hybrid search and reranking} on synthetically generated evaluation set.
-      - >
-        Maintained and enhanced a \textbf{multi-tenant} ERP platform comprising \textbf{60K+ lines of legacy code}, supporting
-        \textbf{1,000+ active projects}. Resolved a \textbf{long-standing} session management defect by implementing
-        \textbf{JWT refresh token rotation}, eliminating form data loss.
-  - title: Research Assistant
-    location: Waterloo, ON
-    date_range: Feb 2026 -- Present
-    company: University of Waterloo
-    highlights:
-      - >
-        Designed comparative experiments for a probabilistic programming language PAL that compiles structural rules into tensor operations.
-        Built a \textbf{hybrid neuro-symbolic} framework for training Named Entity Recognition models to enforce strict linguistic
-        constraints and improve early-epoch model convergence.
-projects:
-  - name: Resume Generator v1
-    tech_stack: Python, Jinja2, Textual, LaTeX
-    link_url: https://github.com/knarfthekant
-    link_label: github
-    highlights:
-      - Built a modular pipeline to transform YAML resume data into Jinja2-rendered LaTeX artifacts.
-      - Added a Textual dashboard for config editing and generation without touching the pipeline internals.
-  - name: Marketplace Platform
-    tech_stack: NestJS, PostgreSQL, AWS
-    highlights:
-      - Led architecture and implementation of a production marketplace product from blank repo to deployment.
-      - Designed backend workflows that balanced product speed with transactional correctness.
+    date_range: Sep 2024 - Apr 2029
+    gpa: "CGPA: 92.3/100"
 skills:
   - category: Programming Languages
     items: Python, TypeScript, SQL, Java, C++
+  - category: AI and ML
+    items: LangGraph, RAG evaluation, DeepEval, hybrid retrieval, probabilistic modeling
   - category: Frameworks
-    items: Textual, Jinja2, NestJS, React
+    items: Jinja2, prompt\_toolkit, NestJS, React
   - category: Platforms
     items: AWS, PostgreSQL, LaTeX, Linux
 certificates:
@@ -76,3 +27,27 @@ certificates:
     name: XCS224N Natural Language Understanding
     cert_url: https://example.com/certificates/xcs224n
     cert_label: credential
+experience_entries:
+  - id: ziyutec_marketplace
+    title: Software Developer Intern
+    location: Richmond, BC
+    date_range: Sep 2025 -- Apr 2026
+    company: Ziyutec Inc.
+    max_bullets: 4
+  - id: uw_research_ner
+    title: Research Assistant
+    location: Waterloo, ON
+    date_range: Feb 2026 -- Present
+    company: University of Waterloo
+    max_bullets: 2
+project_entries:
+  - id: resume_builder_v1
+    name: Resume Generator v1
+    tech_stack: Python, Jinja2, prompt\_toolkit, LaTeX, LangGraph
+    link_url: https://github.com/knarfthekant
+    link_label: github
+    max_bullets: 3
+  - id: marketplace_platform
+    name: Marketplace Platform
+    tech_stack: NestJS, PostgreSQL, AWS
+    max_bullets: 2

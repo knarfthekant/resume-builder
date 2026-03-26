@@ -1,15 +1,99 @@
-summary:
-  general: >
-    \textbf{Full-stack} developer specialized in translating \textbf{business requirements into production-ready}
-    systems.
+summary_options:
+  - id: general_fullstack
+    text: >
+      \textbf{Full-stack} developer specialized in translating \textbf{business requirements into production-ready}
+      systems. Shipped customer-facing software quickly and reliably across backend, automation, and AI-assisted workflows.
+    tags: [full-stack, product, execution]
+  - id: ai_automation
+    text: >
+      Engineer focused on \textbf{AI automation}, retrieval systems, and developer tooling. Builds practical products that
+      connect LLM workflows with reliable backend systems and measurable delivery outcomes.
+    tags: [ai, automation, backend]
+  - id: backend_platform
+    text: >
+      Backend-leaning builder experienced in \textbf{distributed application design}, data modeling, and systems that balance
+      correctness, speed, and maintainability in startup and research environments.
+    tags: [backend, systems, architecture]
+
 experience:
-  ziyutec:
-    - Led marketplace architecture, implementation, and deployment across the full SDLC.
-    - Built workflow automation that reduced operational overhead for a 50-person engineering team.
-    - Implemented RAG pipelines and hybrid retrieval to improve enterprise document search quality.
-  uw_research:
-    - Built neuro-symbolic NER experiments to enforce linguistic constraints during model training.
+  ziyutec_marketplace:
+    - id: ziyutec_sdlc
+      text: >
+        \textbf{Owned} the end-to-end planning and development of a \hrefWithoutArrow{https://neshub.net}{global B2B marketplace}
+        for a startup initiative, \textbf{leading} system design, implementation, and deployment (AWS) across the \textbf{entire SDLC}.
+      tags: [product, architecture, aws]
+      evidence: Built and launched the marketplace from a blank repository.
+    - id: ziyutec_rbac
+      text: >
+        Architected a Role-Based Access Control framework (NestJS, PostgreSQL) to support extensible user roles; balanced database
+        \textbf{normalization} against \textbf{query performance} via denormalization and data \textbf{integrity} checks.
+      tags: [backend, authorization, database]
+      evidence: Production RBAC design across platform workflows.
+    - id: ziyutec_caching
+      text: >
+        Engineered a \textbf{caching} layer to decouple client-side state from \textbf{atomic} database transactions, reducing
+        \textbf{user friction} while ensuring transactional integrity.
+      tags: [backend, transactions, performance]
+      evidence: Reduced UX friction while preserving correctness.
+    - id: ziyutec_workflow_agent
+      text: >
+        Built an automation agent for engineering workflow, reducing operational workload by \textbf{20\%} across a \textbf{50-person}
+        engineering team.
+      tags: [automation, ai, productivity]
+      evidence: Internal engineering automation deployment.
+    - id: ziyutec_rag
+      text: >
+        Built a \textbf{RAG agent}, indexing \textbf{500+ enterprise documents} of different format; improved \textbf{contextual relevance
+        by 16\%} (DeepEval) via \textbf{hybrid search and reranking} on synthetically generated evaluation set.
+      tags: [rag, search, evaluation]
+      evidence: DeepEval measured relevance improvement.
+    - id: ziyutec_legacy
+      text: >
+        Maintained and enhanced a \textbf{multi-tenant} ERP platform comprising \textbf{60K+ lines of legacy code}, supporting
+        \textbf{1,000+ active projects}. Resolved a \textbf{long-standing} session management defect by implementing
+        \textbf{JWT refresh token rotation}, eliminating form data loss.
+      tags: [legacy, reliability, auth]
+      evidence: Fixed a persistent production session issue.
+  uw_research_ner:
+    - id: research_neurosymbolic
+      text: >
+        Designed comparative experiments for a probabilistic programming language PAL that compiles structural rules into tensor operations.
+        Built a \textbf{hybrid neuro-symbolic} framework for training Named Entity Recognition models to enforce strict linguistic
+        constraints and improve early-epoch model convergence.
+      tags: [research, ml, neurosymbolic]
+      evidence: Research implementation for PAL-based constraint learning.
+    - id: research_experiments
+      text: >
+        Structured reproducible experiments and analysis pipelines for model comparisons, enabling faster iteration on constraint-driven
+        NER training strategies.
+      tags: [research, experimentation, reproducibility]
+      evidence: Comparative evaluation workflow for model variants.
+
 projects:
-  resume_generator:
-    - Built a modular YAML to Jinja2 to LaTeX pipeline.
-    - Added a Textual UI for config editing and resume generation.
+  resume_builder_v1:
+    - id: resume_pipeline
+      text: >
+        Built a modular pipeline that transforms structured YAML resume data into Jinja2-rendered LaTeX artifacts and isolated generation outputs.
+      tags: [python, tooling, latex]
+      evidence: End-to-end resume generation pipeline.
+    - id: resume_cli
+      text: >
+        Designed a keyboard-only CLI for resume generation, configuration, and human-in-the-loop review using prompt\_toolkit.
+      tags: [cli, ux, prompt_toolkit]
+      evidence: Full-screen terminal workflow.
+    - id: resume_ai
+      text: >
+        Added an AI-ready selection stage so resume content can be matched to job descriptions before rendering and compilation.
+      tags: [ai, langgraph, orchestration]
+      evidence: Selection pipeline abstraction for future agent workflows.
+  marketplace_platform:
+    - id: marketplace_architecture
+      text: >
+        Led architecture and implementation of a production marketplace product from blank repo to deployment.
+      tags: [architecture, startup, delivery]
+      evidence: Product launch ownership.
+    - id: marketplace_transactions
+      text: >
+        Designed backend workflows that balanced product speed with transactional correctness.
+      tags: [backend, transactions, product]
+      evidence: Operational backend design in production.

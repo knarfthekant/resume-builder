@@ -10,13 +10,11 @@ class AppConfig:
     data_root: Path
     output_root: Path
     active_profile: str
-    active_bullets_catalog: str
+    active_bullet_library: str
     compile_pdf: bool = True
-
-
-@dataclass(slots=True)
-class Highlights:
-    summary: str
+    openrouter_model: str = "openai/gpt-5.4-mini"
+    openrouter_base_url: str = "https://openrouter.ai/api/v1"
+    setup_completed: bool = False
 
 
 @dataclass(slots=True)
@@ -25,24 +23,6 @@ class EducationEntry:
     degree: str
     date_range: str
     gpa: str = ""
-
-
-@dataclass(slots=True)
-class ExperienceEntry:
-    title: str
-    location: str
-    date_range: str
-    company: str
-    highlights: list[str] = field(default_factory=list)
-
-
-@dataclass(slots=True)
-class ProjectEntry:
-    name: str
-    tech_stack: str
-    highlights: list[str] = field(default_factory=list)
-    link_url: str = ""
-    link_label: str = ""
 
 
 @dataclass(slots=True)
@@ -61,6 +41,26 @@ class CertificateEntry:
 
 
 @dataclass(slots=True)
+class ExperienceEntryDefinition:
+    id: str
+    title: str
+    location: str
+    date_range: str
+    company: str
+    max_bullets: int
+
+
+@dataclass(slots=True)
+class ProjectEntryDefinition:
+    id: str
+    name: str
+    tech_stack: str
+    max_bullets: int
+    link_url: str = ""
+    link_label: str = ""
+
+
+@dataclass(slots=True)
 class ResumeProfile:
     candidate_name: str
     email: str
@@ -71,25 +71,42 @@ class ResumeProfile:
     github_handle: str
     portfolio_url: str = ""
     portfolio_label: str = ""
-    highlights: Highlights | None = None
     education: list[EducationEntry] = field(default_factory=list)
-    experience: list[ExperienceEntry] = field(default_factory=list)
-    projects: list[ProjectEntry] = field(default_factory=list)
     skills: list[SkillGroup] = field(default_factory=list)
     certificates: list[CertificateEntry] = field(default_factory=list)
+    experience_entries: list[ExperienceEntryDefinition] = field(default_factory=list)
+    project_entries: list[ProjectEntryDefinition] = field(default_factory=list)
 
 
 @dataclass(slots=True)
-class BulletCatalog:
+class BulletOption:
+    id: str
+    text: str
+    tags: list[str] = field(default_factory=list)
+    evidence: str = ""
+
+
+@dataclass(slots=True)
+class BulletLibrary:
+    summary_options: list[BulletOption] = field(default_factory=list)
+    experience: dict[str, list[BulletOption]] = field(default_factory=dict)
+    projects: dict[str, list[BulletOption]] = field(default_factory=dict)
+
+
+@dataclass(slots=True)
+class ResumeSelection:
+    summary_id: str | None = None
+    summary_rewrite: str = ""
     experience: dict[str, list[str]] = field(default_factory=dict)
     projects: dict[str, list[str]] = field(default_factory=dict)
-    summary: dict[str, str] = field(default_factory=dict)
+    rewrites: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass(slots=True)
 class PipelineRequest:
     profile_name: str | None = None
-    bullets_catalog_name: str | None = None
+    bullet_library_name: str | None = None
+    selection: ResumeSelection | None = None
     job_description: str | None = None
     compile_pdf: bool | None = None
 
