@@ -7,6 +7,7 @@ from prompt_toolkit.application import Application
 from prompt_toolkit.buffer import Buffer
 from prompt_toolkit.document import Document
 from prompt_toolkit.filters import Condition
+from prompt_toolkit.formatted_text import ANSI
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import ConditionalContainer, HSplit, Layout, VSplit, Window
 from prompt_toolkit.layout.controls import BufferControl, FormattedTextControl
@@ -27,6 +28,23 @@ MENU_ITEMS: list[tuple[str, str]] = [
     ("show", "show current config"),
     ("exit", "exit"),
 ]
+
+ANSI_RESET = "\x1b[0m"
+ANSI_TITLE = "\x1b[38;5;111m"
+ANSI_ACCENT = "\x1b[38;5;111m"
+ANSI_MUTED = "\x1b[38;5;245m"
+ANSI_NOTICE = "\x1b[38;5;114m"
+ANSI_SELECTED = "\x1b[1;38;5;16;48;5;117m"
+ANSI_MESSAGE = "\x1b[38;5;223m"
+TITLE_ART = [
+"██████╗░███████╗░██████╗██╗░░░██╗███╗░░░███╗███████╗  ██████╗░██╗░░░██╗██╗██╗░░░░░██████╗░███████╗██████╗░",
+"██╔══██╗██╔════╝██╔════╝██║░░░██║████╗░████║██╔════╝  ██╔══██╗██║░░░██║██║██║░░░░░██╔══██╗██╔════╝██╔══██╗",
+"██████╔╝█████╗░░╚█████╗░██║░░░██║██╔████╔██║█████╗░░  ██████╦╝██║░░░██║██║██║░░░░░██║░░██║█████╗░░██████╔╝",
+"██╔══██╗██╔══╝░░░╚═══██╗██║░░░██║██║╚██╔╝██║██╔══╝░░  ██╔══██╗██║░░░██║██║██║░░░░░██║░░██║██╔══╝░░██╔══██╗",
+"██║░░██║███████╗██████╔╝╚██████╔╝██║░╚═╝░██║███████╗  ██████╦╝╚██████╔╝██║███████╗██████╔╝███████╗██║░░██║",
+"╚═╝░░╚═╝╚══════╝╚═════╝░░╚═════╝░╚═╝░░░░░╚═╝╚══════╝  ╚═════╝░░╚═════╝░╚═╝╚══════╝╚═════╝░╚══════╝╚═╝░░╚═╝",
+]
+TITLE_RULE = "─" * 90
 
 
 class ResumeBuilderCLI:
@@ -124,11 +142,7 @@ class ResumeBuilderCLI:
         )
 
     def render_text(self) -> str:
-        header = [
-            "resume builder",
-            "==============",
-            "",
-        ]
+        header = [*TITLE_ART, TITLE_RULE, ""]
         if self.mode == "menu":
             return "\n".join(header + self._render_menu_lines())
         if self.mode == "choice":
@@ -139,63 +153,84 @@ class ResumeBuilderCLI:
             return "\n".join(header + self._render_message_lines())
         return "\n".join(header + ["unknown mode"])
 
+    def render_ansi(self) -> str:
+        styled_lines: list[str] = []
+        for line in self.render_text().splitlines():
+            if line in TITLE_ART or line in {TITLE_RULE}:
+                styled_lines.append(f"{ANSI_TITLE}{line}{ANSI_RESET}")
+                continue
+            if line.startswith("┌") or line.startswith("└"):
+                styled_lines.append(f"{ANSI_ACCENT}{line}{ANSI_RESET}")
+                continue
+            if line.startswith("│ >"):
+                styled_lines.append(f"{ANSI_SELECTED}{line}{ANSI_RESET}")
+                continue
+            if line.startswith("│"):
+                styled_lines.append(
+                    f"{ANSI_ACCENT}│{ANSI_RESET}"
+                    + line[1:-1]
+                    + f"{ANSI_ACCENT}{line[-1]}{ANSI_RESET}"
+                )
+                continue
+            if line.startswith("keys:"):
+                styled_lines.append(f"{ANSI_MUTED}{line}{ANSI_RESET}")
+                continue
+            if line.startswith("status:"):
+                styled_lines.append(f"{ANSI_NOTICE}{line}{ANSI_RESET}")
+                continue
+            if self.mode == "message" and line and not line.startswith("│"):
+                styled_lines.append(f"{ANSI_MESSAGE}{line}{ANSI_RESET}")
+                continue
+            styled_lines.append(line)
+        return "\n".join(styled_lines)
+
     def _render_menu_lines(self) -> list[str]:
-        lines = [
-            "config",
-            *[f"  {line}" for line in self.format_status().splitlines()],
-            "",
-            "actions",
-        ]
+        config_box = self._box_lines("config", self.format_status().splitlines())
+        action_lines = []
         for index, (_, label) in enumerate(MENU_ITEMS):
             prefix = "> " if index == self.selection_index else "  "
-            lines.append(f"{prefix}{label}")
-        lines.extend(
-            [
-                "",
-                "keys: up/down or j/k move, enter select, q quit",
-                f"status: {self.notice}",
-            ]
-        )
-        return lines
+            action_lines.append(f"{prefix}{label}")
+        action_box = self._box_lines("actions", action_lines)
+        return config_box + [""] + action_box + [
+            "",
+            "keys: up/down or j/k move, enter select, q quit",
+            f"status: {self.notice}",
+        ]
+
+    def _box_lines(self, title: str, lines: list[str]) -> list[str]:
+        inner_width = max(len(title) + 2, *(len(line) for line in lines)) + 2
+        title_text = f" {title} "
+        top = "┌" + title_text + ("─" * (inner_width - len(title_text))) + "┐"
+        content = [f"│ {line.ljust(inner_width - 2)} │" for line in lines]
+        bottom = "└" + ("─" * inner_width) + "┘"
+        return [top, *content, bottom]
 
     def _render_choice_lines(self) -> list[str]:
-        lines = [
-            self.choice_title,
-            "-" * len(self.choice_title),
-            f"current: {self.choice_current}",
-            "",
-        ]
+        choice_lines = [f"current: {self.choice_current}", ""]
         for index, item in enumerate(self.choice_items):
             prefix = "> " if index == self.selection_index else "  "
-            lines.append(f"{prefix}{item}")
-        lines.extend(["", "keys: up/down or j/k move, enter choose, esc back"])
-        return lines
+            choice_lines.append(f"{prefix}{item}")
+        return self._box_lines(self.choice_title, choice_lines) + [
+            "",
+            "keys: up/down or j/k move, enter choose, esc back",
+        ]
 
     def _render_input_lines(self) -> list[str]:
         current_value = ""
         if self.input_field:
             current_value = str(getattr(self.config, self.input_field))
-        return [
-            self.input_title,
-            "-" * len(self.input_title),
+        details = [
             f"current: {current_value}",
             "",
             "type a new value below",
-            "keys: enter save, esc back",
         ]
+        return self._box_lines(self.input_title, details) + ["", "keys: enter save, esc back"]
 
     def _render_message_lines(self) -> list[str]:
-        return [
-            self.message_title,
-            "-" * len(self.message_title),
-            *self.message_body.splitlines(),
+        return self._box_lines(self.message_title, self.message_body.splitlines() or [""]) + [
             "",
             "keys: enter back, q quit",
         ]
-
-    def _set_notice(self, value: str) -> None:
-        self.notice = value
-        self._invalidate()
 
     def _invalidate(self) -> None:
         if self.application is not None:
@@ -379,11 +414,11 @@ class ResumeBuilderCLI:
         return bindings
 
     def _build_application(self) -> Application[None]:
-        body_control = FormattedTextControl(lambda: self.render_text())
+        body_control = FormattedTextControl(lambda: ANSI(self.render_ansi()))
         self.body_window = Window(content=body_control, always_hide_cursor=True)
 
         input_prompt = Window(
-            content=FormattedTextControl(lambda: "value > "),
+            content=FormattedTextControl(lambda: ANSI(f"{ANSI_ACCENT}value > {ANSI_RESET}")),
             width=8,
             dont_extend_width=True,
             always_hide_cursor=True,
