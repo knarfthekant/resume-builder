@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.22)  25 MAR 2026 21:35
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.22)  26 MAR 2026 08:27
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -393,8 +393,7 @@ LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 130.
  (/usr/local/texlive/2026/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-No file main.aux.
+) (./main.aux)
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 130.
@@ -415,6 +414,7 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 130.
 LaTeX Font Info:    ... okay on input line 130.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 130.
 LaTeX Font Info:    ... okay on input line 130.
+
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -719,16 +719,16 @@ LaTeX Font Warning: Font shape `OT1/lmr/m/scit' undefined
 ./sections/skills.tex:10: Missing $ inserted.
 <inserted text> 
                 $
-l.10         \textbf{[[ skill_group.category ]]:}
-                                                  [[ skill_group.items ]]
+l.10 ...   \textbf{[[ skill_group["category"] ]]:}
+                                                   [[ skill_group["items"] ]]
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
 ./sections/skills.tex:10: Extra }, or forgotten $.
 <recently read> \egroup 
                         
-l.10         \textbf{[[ skill_group.category ]]:}
-                                                  [[ skill_group.items ]]
+l.10 ...   \textbf{[[ skill_group["category"] ]]:}
+                                                   [[ skill_group["items"] ]]
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
 you forgot something else, as in `\hbox{$x}'. In such cases
@@ -821,15 +821,15 @@ Package lastpage Warning: Rerun to get the references right on input line 184.
 ### simple group (level 1) entered at line 11 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 15321 strings out of 467525
- 261528 string characters out of 5418982
- 681410 words of memory out of 5000000
- 44007 multiletter control sequences out of 15000+600000
+ 15324 strings out of 467525
+ 261567 string characters out of 5418982
+ 681401 words of memory out of 5000000
+ 44008 multiletter control sequences out of 15000+600000
  677847 words of font info for 71 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,5n,84p,444b,677s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2026/texmf-dist/fonts/type1/public/fontawesome5/FontAwesome5Brands-Regular.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/fontawesome5/FontAwesome5Free-Regular.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/fontawesome5/FontAwesome5Free-Solid.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmcsco10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmr17.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmsy10.pfb>
-Output written on main.pdf (1 page, 215728 bytes).
+Output written on main.pdf (1 page, 215571 bytes).
 PDF statistics:
  126 PDF objects out of 1000 (max. 8388607)
  91 compressed objects within 1 object stream

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import argparse
+import threading
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable
@@ -11,8 +13,10 @@ from prompt_toolkit.document import Document
 from prompt_toolkit.filters import Condition
 from prompt_toolkit.formatted_text import ANSI
 from prompt_toolkit.key_binding import KeyBindings
-from prompt_toolkit.layout import ConditionalContainer, HSplit, Layout, VSplit, Window
+from prompt_toolkit.layout import ConditionalContainer, DynamicContainer, HSplit, Layout, Window
 from prompt_toolkit.layout.controls import BufferControl, FormattedTextControl
+from prompt_toolkit.styles import Style
+from prompt_toolkit.widgets import Frame
 
 from app.ai.client import AIConfigurationError
 from app.ai.service import AISuggestionResult, AISelectionService
@@ -21,7 +25,17 @@ from app.compiler import LatexCompilationError
 from app.config import DEFAULT_CONFIG_PATH, load_config, save_config
 from app.data_loader import list_relative_yaml_files, load_bullet_library, load_resume_profile
 from app.env import get_openrouter_api_key, mask_api_key, save_openrouter_api_key
-from app.interactive.rendering import box_lines, header_lines, render_ansi
+from app.interactive.rendering import (
+    MARKUP_BOLD_CLOSE,
+    MARKUP_BOLD_OPEN,
+    MARKUP_KEY_CLOSE,
+    MARKUP_KEY_OPEN,
+    MARKUP_LABEL_CLOSE,
+    MARKUP_LABEL_OPEN,
+    box_lines,
+    header_lines,
+    render_ansi,
+)
 from app.models import (
     AppConfig,
     BulletLibrary,
@@ -88,6 +102,13 @@ AI_REVIEW_MENU_ITEMS = [
     MenuItem("cancel", "cancel"),
 ]
 
+APP_STYLE = Style.from_dict(
+    {
+        "frame.border": "#87afff",
+        "frame.label": "bold #87afff",
+    }
+)
+
 
 class ResumeCLIApp:
     def __init__(
@@ -129,6 +150,11 @@ class ResumeCLIApp:
         self.message_title = ""
         self.message_body = ""
         self.message_close_handler: Callable[[], None] | None = None
+        self.loading_title = ""
+        self.loading_message = ""
+        self.loading_frame_index = 0
+        self.loading_active = False
+        self.loading_frames = ["[=   ]", "[==  ]", "[=== ]", "[ ===]", "[  ==]", "[   =]"]
 
         self.session = SessionState(
             profile_name=self.config.active_profile,
@@ -139,6 +165,7 @@ class ResumeCLIApp:
 
         self.application: Application[None] | None = None
         self.body_window: Window | None = None
+        self.input_control = BufferControl(buffer=self.input_buffer)
         self.single_input_window: Window | None = None
         self.multi_input_window: Window | None = None
 
@@ -225,6 +252,8 @@ class ResumeCLIApp:
             lines.extend(self._render_input_lines())
         elif self.mode == "ai_review":
             lines.extend(self._render_ai_review_lines())
+        elif self.mode == "loading":
+            lines.extend(self._render_loading_lines())
         elif self.mode == "message":
             lines.extend(self._render_message_lines())
         else:
@@ -275,6 +304,8 @@ class ResumeCLIApp:
         if self.mode == "ai_review":
             self._activate_ai_review_item()
             return True
+        if self.mode == "loading":
+            return True
         if self.mode == "message":
             self.close_message()
             return True
@@ -319,6 +350,8 @@ class ResumeCLIApp:
             return False
         if self.mode == "config_menu":
             self._enter_main_menu("back to main menu")
+            return True
+        if self.mode == "loading":
             return True
         if self.mode == "choice":
             if self.choice_cancel_handler is not None:
@@ -440,6 +473,9 @@ class ResumeCLIApp:
         self.message_title = ""
         self.message_body = ""
         self.message_close_handler = None
+        self.loading_title = ""
+        self.loading_message = ""
+        self.loading_frame_index = 0
 
     def _activate_main_menu_item(self) -> bool:
         action = MAIN_MENU_ITEMS[self.selection_index].value
@@ -600,24 +636,25 @@ class ResumeCLIApp:
         self._request_ai_suggestion(feedback="")
 
     def _request_ai_suggestion(self, *, feedback: str) -> None:
-        try:
-            assert self.session.profile is not None
-            assert self.session.library is not None
-            result = self.ai_service.suggest(
+        assert self.session.profile is not None
+        assert self.session.library is not None
+
+        def _worker() -> AISuggestionResult:
+            return self.ai_service.suggest(
                 self.session.profile,
                 self.session.library,
                 self.session.job_description,
                 feedback=feedback,
                 previous_suggestion=self.session.ai_suggestion,
             )
-        except (AIConfigurationError, SelectionValidationError) as exc:
-            self.open_message("ai selection failed", str(exc))
-            return
-        except Exception as exc:  # noqa: BLE001
-            self.open_message("ai selection failed", str(exc))
-            return
 
-        self._enter_ai_review(result)
+        self._run_waiting_task(
+            title="ai selection",
+            message="matching job requirements to bullet ids",
+            worker=_worker,
+            success_handler=self._enter_ai_review,
+            error_title="ai selection failed",
+        )
 
     def _enter_ai_review(self, result: AISuggestionResult) -> None:
         self.session.selection = result.selection
@@ -749,8 +786,8 @@ class ResumeCLIApp:
         self._invalidate()
 
     def _generate_current_session(self, title: str) -> None:
-        try:
-            result = self.generation_runner(
+        def _worker():
+            return self.generation_runner(
                 PipelineRequest(
                     profile_name=self.session.profile_name,
                     bullet_library_name=self.session.bullet_library_name,
@@ -759,13 +796,16 @@ class ResumeCLIApp:
                 ),
                 self.config,
             )
-        except LatexCompilationError as exc:
-            self.open_message("generation failed", str(exc))
-            return
-        except Exception as exc:  # noqa: BLE001
-            self.open_message("generation failed", str(exc))
-            return
+        message = "rendering LaTeX and compiling PDF" if self.config.compile_pdf else "rendering LaTeX"
+        self._run_waiting_task(
+            title="resume generation",
+            message=message,
+            worker=_worker,
+            success_handler=lambda result, success_title=title: self._handle_generation_success(success_title, result),
+            error_title="generation failed",
+        )
 
+    def _handle_generation_success(self, title: str, result) -> None:  # noqa: ANN001
         pdf_line = str(result.pdf_path) if getattr(result, "pdf_path", None) else "not generated"
         self.open_message(
             title,
@@ -777,6 +817,62 @@ class ResumeCLIApp:
                 ]
             ),
         )
+
+    def _run_waiting_task(
+        self,
+        *,
+        title: str,
+        message: str,
+        worker: Callable[[], object],
+        success_handler: Callable[[object], None],
+        error_title: str,
+    ) -> None:
+        if self.application is None:
+            try:
+                result = worker()
+            except (AIConfigurationError, SelectionValidationError, LatexCompilationError) as exc:
+                self.open_message(error_title, str(exc))
+                return
+            except Exception as exc:  # noqa: BLE001
+                self.open_message(error_title, str(exc))
+                return
+            success_handler(result)
+            return
+
+        self.mode = "loading"
+        self.loading_title = title
+        self.loading_message = message
+        self.loading_frame_index = 0
+        self.loading_active = True
+        self.notice = message
+        self._focus_main()
+        self._invalidate()
+
+        def _spinner() -> None:
+            while self.loading_active:
+                time.sleep(0.12)
+                if not self.loading_active:
+                    break
+                self.loading_frame_index = (self.loading_frame_index + 1) % len(self.loading_frames)
+                self._invalidate()
+
+        def _runner() -> None:
+            try:
+                result = worker()
+            except (AIConfigurationError, SelectionValidationError, LatexCompilationError) as exc:
+                self.loading_active = False
+                self.open_message(error_title, str(exc))
+                return
+            except Exception as exc:  # noqa: BLE001
+                self.loading_active = False
+                self.open_message(error_title, str(exc))
+                return
+
+            self.loading_active = False
+            success_handler(result)
+
+        threading.Thread(target=_spinner, daemon=True).start()
+        threading.Thread(target=_runner, daemon=True).start()
 
     def open_message(
         self,
@@ -918,12 +1014,11 @@ class ResumeCLIApp:
         ]
 
     def _render_input_lines(self) -> list[str]:
-        current_value = self.input_buffer.text.replace("\n", " ")[:96]
         info_lines = [
-            f"prompt   : {self.input_prompt}",
-            f"current  : {current_value}",
+            f"{MARKUP_LABEL_OPEN}prompt{MARKUP_LABEL_CLOSE} : {self.input_prompt}",
+            f"{MARKUP_LABEL_OPEN}mode{MARKUP_LABEL_CLOSE}   : {'multiline' if self.input_multiline else 'single-line'}",
             "",
-            "type below" if not self.input_multiline else "type or paste below",
+            "type below inside the input box" if not self.input_multiline else "type or paste inside the input box",
         ]
         key_line = "keys: enter save, esc back" if not self.input_multiline else "keys: ctrl+s save, esc back"
         return box_lines(self.input_title, info_lines) + ["", key_line, f"status: {self.notice}"]
@@ -946,6 +1041,18 @@ class ResumeCLIApp:
             f"status: {self.notice}",
         ]
 
+    def _render_loading_lines(self) -> list[str]:
+        return box_lines(
+            self.loading_title,
+            [
+                f"{MARKUP_BOLD_OPEN}{self.loading_frames[self.loading_frame_index]}{MARKUP_BOLD_CLOSE} {self.loading_message}",
+                "",
+                self._loading_bar(),
+                "",
+                "Please wait. The interface will resume automatically.",
+            ],
+        ) + ["", f"status: {self.notice}"]
+
     def _menu_lines(self, items: list[MenuItem]) -> list[str]:
         lines: list[str] = []
         for index, item in enumerate(items):
@@ -959,31 +1066,38 @@ class ResumeCLIApp:
         assert self.session.library is not None
         lines: list[str] = []
         suggestion = self.session.ai_suggestion
-        lines.append(f"profile      : {self.session.profile_name}")
-        lines.append(f"bullets      : {self.session.bullet_library_name}")
-        lines.append(f"job desc     : {self._truncate(self.session.job_description.replace(chr(10), ' '), 96)}")
+        lines.append(f"{MARKUP_LABEL_OPEN}profile{MARKUP_LABEL_CLOSE} : {self.session.profile_name}")
+        lines.append(f"{MARKUP_LABEL_OPEN}library{MARKUP_LABEL_CLOSE} : {self.session.bullet_library_name}")
+        lines.append(
+            f"{MARKUP_LABEL_OPEN}job desc{MARKUP_LABEL_CLOSE}: "
+            f"{self._truncate(self.session.job_description.replace(chr(10), ' '), 96)}"
+        )
         lines.append("")
 
         if suggestion.summary_id:
             summary = self._find_bullet_option(self.session.library.summary_options, suggestion.summary_id)
-            lines.append(f"summary      : {suggestion.summary_id}")
-            lines.append(f"summary text : {self._truncate(suggestion.summary_rewrite or summary.text, 96)}")
+            lines.append(f"{MARKUP_BOLD_OPEN}summary{MARKUP_BOLD_CLOSE}")
+            lines.append(f"  {MARKUP_KEY_OPEN}{suggestion.summary_id}{MARKUP_KEY_CLOSE}")
+            lines.append(f"  {self._truncate(suggestion.summary_rewrite or summary.text, 96)}")
             lines.append("")
 
-        lines.extend(self._format_ai_section_lines("experience", suggestion.experience))
-        lines.extend(self._format_ai_section_lines("projects", suggestion.projects))
+        lines.extend(self._format_ai_section_lines("experience", suggestion.experience, kind="experience"))
+        lines.extend(self._format_ai_section_lines("projects", suggestion.projects, kind="projects"))
         if suggestion.notes:
-            lines.append("notes")
+            lines.append(f"{MARKUP_BOLD_OPEN}notes{MARKUP_BOLD_CLOSE}")
             lines.append(f"  {self._truncate(suggestion.notes, 100)}")
         return lines
 
-    def _format_ai_section_lines(self, label: str, sections: list[SelectedSection]) -> list[str]:
+    def _format_ai_section_lines(self, label: str, sections: list[SelectedSection], *, kind: str) -> list[str]:
         lines: list[str] = []
         if not sections:
             return lines
-        lines.append(label)
+        lines.append(f"{MARKUP_BOLD_OPEN}{label}{MARKUP_BOLD_CLOSE}")
         for section in sections:
-            lines.append(f"  {section.entry_id}")
+            lines.append(
+                f"  {MARKUP_LABEL_OPEN}{self._display_entry_name(kind, section.entry_id)}{MARKUP_LABEL_CLOSE}"
+                f" ({section.entry_id})"
+            )
             for bullet in section.bullets:
                 lines.extend(self._format_ai_bullet_lines(bullet))
         lines.append("")
@@ -992,10 +1106,29 @@ class ResumeCLIApp:
     def _format_ai_bullet_lines(self, bullet: SelectedBullet) -> list[str]:
         assert self.session.library is not None
         bullet_text = self._lookup_bullet_text(bullet.bullet_id)
-        lines = [f"    - {bullet.bullet_id}: {self._truncate(bullet.rewritten_text or bullet_text, 88)}"]
+        lines = [
+            f"    - {MARKUP_KEY_OPEN}{bullet.bullet_id}{MARKUP_KEY_CLOSE} "
+            f"{self._truncate(bullet.rewritten_text or bullet_text, 84)}"
+        ]
         if bullet.rationale:
-            lines.append(f"      rationale: {self._truncate(bullet.rationale, 84)}")
+            lines.append(
+                f"      {MARKUP_LABEL_OPEN}why{MARKUP_LABEL_CLOSE}: "
+                f"{self._truncate(bullet.rationale, 84)}"
+            )
         return lines
+
+    def _display_entry_name(self, kind: str, entry_id: str) -> str:
+        if self.session.profile is None:
+            return entry_id
+        if kind == "experience":
+            for entry in self.session.profile.experience_entries:
+                if entry.id == entry_id:
+                    return f"{entry.title} @ {entry.company}"
+            return entry_id
+        for entry in self.session.profile.project_entries:
+            if entry.id == entry_id:
+                return entry.name
+        return entry_id
 
     def _lookup_bullet_text(self, bullet_id: str) -> str:
         assert self.session.library is not None
@@ -1066,6 +1199,16 @@ class ResumeCLIApp:
             return collapsed
         return collapsed[: width - 3] + "..."
 
+    def _loading_bar(self) -> str:
+        filled = min(10, self.loading_frame_index + 3)
+        return "[" + ("=" * filled).ljust(10, ".") + "]"
+
+    def _input_window_height(self) -> int:
+        if not self.input_multiline:
+            return 1
+        line_count = self.input_buffer.text.count("\n") + 1
+        return max(4, min(10, line_count + 1))
+
     def _invalidate(self) -> None:
         if self.application is not None:
             self.application.invalidate()
@@ -1088,7 +1231,7 @@ class ResumeCLIApp:
         message_mode = Condition(lambda: self.mode == "message")
         single_input_mode = Condition(lambda: self.mode == "input" and not self.input_multiline)
         multi_input_mode = Condition(lambda: self.mode == "input" and self.input_multiline)
-        non_input_mode = Condition(lambda: self.mode != "input")
+        non_input_mode = Condition(lambda: self.mode not in {"input", "loading"})
         manual_mode = Condition(lambda: self.mode == "manual_step")
 
         @bindings.add("up", filter=menu_modes)
@@ -1142,26 +1285,26 @@ class ResumeCLIApp:
 
     def _build_application(self) -> Application[None]:
         body_control = FormattedTextControl(lambda: ANSI(self.render_ansi()))
-        self.body_window = Window(content=body_control, always_hide_cursor=True)
+        self.body_window = Window(content=body_control, always_hide_cursor=True, dont_extend_height=True)
+        self.single_input_window = Window(content=self.input_control, height=1)
+        self.multi_input_window = Window(content=self.input_control, height=8, wrap_lines=True)
 
-        single_prompt = Window(
-            content=FormattedTextControl(lambda: ANSI(f"{self.input_prompt} > ")),
-            width=14,
-            dont_extend_width=True,
-            always_hide_cursor=True,
-        )
-        self.single_input_window = Window(content=BufferControl(buffer=self.input_buffer), height=1)
-        self.multi_input_window = Window(content=BufferControl(buffer=self.input_buffer), height=8, wrap_lines=True)
+        def _build_single_input_frame():
+            return Frame(self.single_input_window, title=self.input_title, style="class:frame")
+
+        def _build_multi_input_frame():
+            self.multi_input_window.height = self._input_window_height()
+            return Frame(self.multi_input_window, title=self.input_title, style="class:frame")
 
         root = HSplit(
             [
                 self.body_window,
                 ConditionalContainer(
-                    content=VSplit([single_prompt, self.single_input_window]),
+                    content=DynamicContainer(_build_single_input_frame),
                     filter=Condition(lambda: self.mode == "input" and not self.input_multiline),
                 ),
                 ConditionalContainer(
-                    content=self.multi_input_window,
+                    content=DynamicContainer(_build_multi_input_frame),
                     filter=Condition(lambda: self.mode == "input" and self.input_multiline),
                 ),
             ]
@@ -1172,6 +1315,7 @@ class ResumeCLIApp:
             key_bindings=self._build_key_bindings(),
             full_screen=True,
             mouse_support=False,
+            style=APP_STYLE,
         )
 
 

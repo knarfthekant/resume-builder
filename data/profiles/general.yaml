@@ -41,13 +41,36 @@ experience_entries:
     company: University of Waterloo
     max_bullets: 2
 project_entries:
-  - id: resume_builder_v1
-    name: Resume Generator v1
-    tech_stack: Python, Jinja2, prompt\_toolkit, LaTeX, LangGraph
-    link_url: https://github.com/knarfthekant
+  - id: mini_vlm
+    name: Mini VLM
+    tech_stack: Python, PyTorch, SigLIP-2, Qwen3-0.6B
+    link_url: https://github.com/knarfthekant/mini_vlm
     link_label: github
-    max_bullets: 3
-  - id: marketplace_platform
-    name: Marketplace Platform
-    tech_stack: NestJS, PostgreSQL, AWS
     max_bullets: 2
+  - id: mini_vllm
+    name: Mini VLLM
+    tech_stack: Python, PyTorch
+    link_url: https://github.com/knarfthekant/mini_vllm
+    link_label: github
+    max_bullets: 2
+  - id: goodline_inventory
+    name: Goodline Inventory
+    tech_stack: Python, Next.js, PostgreSQL
+    link_url: https://github.com/knarfthekant/goodline_inventory
+    link_label: github
+    max_bullets: 2
+  - id: resume_builder
+    name: Resume Builder
+    tech_stack: Python, Jinja2, prompt\_toolkit, LaTeX, LangGraph
+    link_url: https://github.com/knarfthekant/resume_builder
+    link_label: github
+    max_bullets: 2
+  - id: cc3k
+    name: CC3K
+    tech_stack: C++
+    link_url: https://github.com/Weidoorfin/CS246-CC3K
+    link_label: github
+    max_bullets: 2
+     
+    
+    

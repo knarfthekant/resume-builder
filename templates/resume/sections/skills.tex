@@ -7,7 +7,7 @@
 
 [% for skill_group in skills %]
     \begin{onecolentry}
-        \textbf{[[ skill_group.category ]]:} [[ skill_group.items ]]
+        \textbf{[[ skill_group["category"] ]]:} [[ skill_group["items"] ]]
     \end{onecolentry}
 
     \vspace{0.05 cm}

@@ -70,30 +70,43 @@ experience:
       evidence: Comparative evaluation workflow for model variants.
 
 projects:
-  resume_builder_v1:
-    - id: resume_pipeline
+  mini_vlm:
+    - id: vlm_model
       text: >
-        Built a modular pipeline that transforms structured YAML resume data into Jinja2-rendered LaTeX artifacts and isolated generation outputs.
-      tags: [python, tooling, latex]
-      evidence: End-to-end resume generation pipeline.
-    - id: resume_cli
+        Built a LLaVA style \textbf{Vision-Language Model}, fusing a \textbf{SigLIP-2} vision encoder with \textbf{Qwen3-0.6B} via a pixel-shuffle modality projector; achieved \textbf{32.9\% zero-shot accuracy on MMStar}.
+      tags: [python, pytorch, pretrain, nlp]
+      evidence: Training model from scratch.
+    - id: vlm_training_pipeline
       text: >
-        Designed a keyboard-only CLI for resume generation, configuration, and human-in-the-loop review using prompt\_toolkit.
-      tags: [cli, ux, prompt_toolkit]
-      evidence: Full-screen terminal workflow.
-    - id: resume_ai
+        Designed a high-throughput training pipeline with a \textbf{greedy knapsack} batching strategy to maximize token-level GPU utilization, enabling efficient multimodal pretraining at \textbf{consumer-scale hardware}.
+      tags: [python, data pipeline, pretrain]
+      evidence: Training pipeline design.
+  mini_vllm:
+    - id: vllm_engine
       text: >
-        Added an AI-ready selection stage so resume content can be matched to job descriptions before rendering and compilation.
-      tags: [ai, langgraph, orchestration]
-      evidence: Selection pipeline abstraction for future agent workflows.
-  marketplace_platform:
-    - id: marketplace_architecture
+         Built a LLM \textbf{inference engine from scratch}, featuring continuous batching, scheduler-driven execution, and pluggable dense/paged KV-cache backends, with \textbf{prefix caching} for efficient memory reuse.
+      tags: [python, inference, llm]
+      evidence: Inference engine design.
+    - id: vllm_benchmarking
       text: >
-        Led architecture and implementation of a production marketplace product from blank repo to deployment.
-      tags: [architecture, startup, delivery]
-      evidence: Product launch ownership.
-    - id: marketplace_transactions
+        Designed a ShareGPT-based \textbf{benchmarking} pipeline and demonstrated up to \textbf{59\% higher request throughput} and significantly lower TTFT with paged attention.
+      tags: [python, inference, llm]
+      evidence: Benchmarking pipeline design.
+  goodline_inventory:
+    - id: inventory_system
       text: >
-        Designed backend workflows that balanced product speed with transactional correctness.
-      tags: [backend, transactions, product]
-      evidence: Operational backend design in production.
+        Built a \textbf{full-stack inventory management system} for a local business, featuring \textbf{real-time stock tracking}, \textbf{order management}, and \textbf{user authentication}.
+      tags: [python, nextjs, postgresql, tailwindcss]
+      evidence: Full-stack inventory management system.
+  resume_builder:
+    - id: resume_builder_agent
+      text: >
+        Engineered a multi-step resume optimization agent using LangGraph, leveraging stateful workflows to autonomously map professional experience to job descriptions.
+      tags: [python, langgraph, llm]
+      evidence: Resume optimization agent design.
+    - id: resume_builder_hitl
+      text: >
+        Implemented an iterative Human-in-the-Loop (HITL) feedback system, enabling real-time refinement of LLM-generated resume content based on user-provided constraints.
+      tags: [python, langgraph, llm]
+      evidence: Human-in-the-Loop feedback system design.
+        

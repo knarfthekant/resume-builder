@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1774499759.49215 "/Users/frankshan/Desktop/Job Application/workspace/templates/resume/main.tex" "main.pdf" "main" 1774499760.2792 2
+["pdflatex"] 1774538877.68955 "/Users/frankshan/Desktop/Job Application/workspace/templates/resume/main.tex" "main.pdf" "main" 1774538878.31585 2
   "/Users/frankshan/Desktop/Job Application/workspace/templates/resume/main.tex" 1774499758.31529 5562 14a23d5b4ace4660d31fbc4f1e941962 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/fontawesome5/fa5brands0.enc" 1622837620 2920 d63721872b8c77041b88e51b8f7c291d ""
   "/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/fontawesome5/fa5free1.enc" 1622837620 3042 0e2b14b9be7d01075a4c4591d5d1781b ""
@@ -133,14 +133,14 @@
   "/usr/local/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1774492747 5573038 b99aad5e4898a9034e953632f940512b ""
   "/usr/local/texlive/2026/texmf-var/web2c/pdftex/pdflatex.fmt" 1774209607 3636776 dc5fa9b6b1453b9d196cd42edf876004 ""
   "/usr/local/texlive/2026/texmf.cnf" 1774209515 577 648cd9f92f9c0eac486f4c71c85cfbbe ""
-  "main.aux" 1774499760.1546 1758 84602cf02168165b2c05c712da466288 "pdflatex"
+  "main.aux" 1774538878.21093 1758 84602cf02168165b2c05c712da466288 "pdflatex"
   "main.tex" 1774499758.31529 5562 14a23d5b4ace4660d31fbc4f1e941962 ""
   "sections/certificates.tex" 1774499758.31811 744 c4b1d1ce2029d97979ff4f654b000480 ""
   "sections/education.tex" 1774499758.31623 601 cefd628996505553b0e690d2642f2748 ""
   "sections/experience.tex" 1774499758.31666 904 9331e8fda11ac692b889393a2214af39 ""
   "sections/highlights.tex" 1774499758.31581 269 21a829e431074bc9f79389a1936df07d ""
   "sections/projects.tex" 1774499758.3171 861 e2bc55ab93c74e5d02291a6108d77184 ""
-  "sections/skills.tex" 1774499758.31763 381 d4d348df7d70ad045b51ef7f034abf0c ""
+  "sections/skills.tex" 1774538876.57598 387 be993fd46f0410e28cdc169c02b9ebfc ""
   (generated)
   "main.aux"
   "main.log"
