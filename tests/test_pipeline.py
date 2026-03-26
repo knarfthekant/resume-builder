@@ -5,6 +5,7 @@ import unittest
 from pathlib import Path
 
 from app.config import default_config
+from app.models import PipelineRequest
 from app.pipeline import ResumePipeline
 
 
@@ -31,6 +32,23 @@ class PipelineTests(unittest.TestCase):
             self.assertIsNotNone(result.pdf_path)
             assert result.pdf_path is not None
             self.assertTrue(result.pdf_path.exists())
+
+    def test_generation_writes_summary_file_when_requested(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            config = default_config()
+            config.output_root = Path(temp_dir)
+            config.compile_pdf = False
+
+            result = ResumePipeline(config).run(
+                PipelineRequest(
+                    generation_summary_text="AI Generation Summary\n\nsummary: test",
+                )
+            )
+
+            self.assertIsNotNone(result.summary_path)
+            assert result.summary_path is not None
+            self.assertTrue(result.summary_path.exists())
+            self.assertIn("AI Generation Summary", result.summary_path.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

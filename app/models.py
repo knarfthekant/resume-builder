@@ -113,6 +113,7 @@ class PipelineRequest:
     bullet_library_name: str | None = None
     selection: ResumeSelection | None = None
     job_description: str | None = None
+    generation_summary_text: str | None = None
     compile_pdf: bool | None = None
 
 
@@ -121,3 +122,4 @@ class GenerationResult:
     output_dir: Path
     rendered_main: Path
     pdf_path: Path | None = None
+    summary_path: Path | None = None

@@ -6,6 +6,7 @@ from pathlib import Path
 from app.compiler import compile_latex
 from app.config import load_config
 from app.data_loader import load_bullet_library, load_resume_profile
+from app.generation_summary import write_generation_summary
 from app.models import AppConfig, GenerationResult, PipelineRequest
 from app.selection import ManualSelectionService, SelectionApplier
 
@@ -34,12 +35,18 @@ class ResumePipeline:
         from app.renderer import render_main_template
 
         rendered_main = render_main_template(self.config.template_root, output_dir, render_context)
+        summary_path = write_generation_summary(output_dir, request.generation_summary_text)
 
         pdf_path = None
         if compile_pdf_enabled:
             pdf_path = compile_latex(output_dir, rendered_main.name)
 
-        return GenerationResult(output_dir=output_dir, rendered_main=rendered_main, pdf_path=pdf_path)
+        return GenerationResult(
+            output_dir=output_dir,
+            rendered_main=rendered_main,
+            pdf_path=pdf_path,
+            summary_path=summary_path,
+        )
 
     def _create_output_dir(self) -> Path:
         timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")

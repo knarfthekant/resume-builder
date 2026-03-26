@@ -10,7 +10,7 @@ portfolio_label: portfolio
 min_experience_entries: 1
 max_experience_entries: 2
 min_project_entries: 2
-max_project_entries: 4
+max_project_entries: 3
 education:
   - institution: University of Waterloo
     degree: Bachelor of Computer Science, Honours Computer Science, AI Specialization
@@ -66,18 +66,19 @@ project_entries:
     link_label: github
     min_bullets: 2
     max_bullets: 2
-  - id: resume_builder
-    name: Resume Builder
-    tech_stack: Python, Jinja2, prompt\_toolkit, LaTeX, LangGraph
-    link_url: https://github.com/knarfthekant/resume_builder
-    link_label: github
-    min_bullets: 1
-    max_bullets: 2
   - id: cc3k
     name: CC3K
     tech_stack: C++
     link_url: https://github.com/Weidoorfin/CS246-CC3K
     link_label: github
-    min_bullets: 1
+    min_bullets: 2
     max_bullets: 2
+  - id: snapplot
+    name: Snapplot
+    tech_stack: React Native, Expo, TypeScript
+    link_url: https://github.com/and-yliu/snapplot
+    link_label: github
+    min_bullets: 2
+    max_bullets: 2
+    
     

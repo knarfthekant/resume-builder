@@ -48,6 +48,10 @@ def header_lines() -> list[str]:
     return [*TITLE_ART, TITLE_RULE_LINE, ""]
 
 
+def compact_header_lines() -> list[str]:
+    return []
+
+
 def box_lines(title: str, lines: list[str]) -> list[str]:
     safe_lines = lines or [""]
     terminal_columns = shutil.get_terminal_size(fallback=(120, 40)).columns

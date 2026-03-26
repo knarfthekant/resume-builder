@@ -23,7 +23,7 @@ class FakeAIService:
                 summary_id="ai_automation",
                 experience=[
                     SelectedSection(
-                        entry_id="ziyutec_marketplace",
+                        entry_id="ziyutec",
                         bullets=[
                             SelectedBullet(
                                 bullet_id="ziyutec_rag",
@@ -38,12 +38,29 @@ class FakeAIService:
                 ],
                 projects=[
                     SelectedSection(
-                        entry_id="resume_builder",
+                        entry_id="mini_vllm",
                         bullets=[
                             SelectedBullet(
-                                bullet_id="resume_builder_agent",
+                                bullet_id="vllm_engine",
                                 rationale="Directly matches the AI selection workflow.",
-                            )
+                            ),
+                            SelectedBullet(
+                                bullet_id="vllm_scheduler",
+                                rationale="Shows systems-level inference scheduling work.",
+                            ),
+                        ],
+                    ),
+                    SelectedSection(
+                        entry_id="mini_vlm",
+                        bullets=[
+                            SelectedBullet(
+                                bullet_id="vlm_model",
+                                rationale="Shows hands-on multimodal model implementation.",
+                            ),
+                            SelectedBullet(
+                                bullet_id="vlm_training_pipeline",
+                                rationale="Adds training systems depth.",
+                            ),
                         ],
                     )
                 ],
@@ -51,8 +68,8 @@ class FakeAIService:
             ),
             selection=ResumeSelection(
                 summary_id="ai_automation",
-                experience={"ziyutec_marketplace": ["ziyutec_rag", "ziyutec_workflow_agent"]},
-                projects={"resume_builder": ["resume_builder_agent"]},
+                experience={"ziyutec": ["ziyutec_rag", "ziyutec_workflow_agent", "ziyutec_sdlc", "ziyutec_system_design"]},
+                projects={"mini_vllm": ["vllm_engine", "vllm_scheduler"], "mini_vlm": ["vlm_model", "vlm_training_pipeline"]},
             ),
         )
 
@@ -148,7 +165,17 @@ class CliTests(unittest.TestCase):
                 output_dir.mkdir(parents=True, exist_ok=True)
                 rendered_main = output_dir / "main.tex"
                 rendered_main.write_text("test", encoding="utf-8")
-                return GenerationResult(output_dir=output_dir, rendered_main=rendered_main, pdf_path=None)
+                summary_path = output_dir / "generation_summary.txt"
+                if request.generation_summary_text:
+                    summary_path.write_text(request.generation_summary_text, encoding="utf-8")
+                else:
+                    summary_path = None
+                return GenerationResult(
+                    output_dir=output_dir,
+                    rendered_main=rendered_main,
+                    pdf_path=None,
+                    summary_path=summary_path,
+                )
 
             app = ResumeCLIApp(
                 config_path=config_path,
@@ -180,6 +207,48 @@ class CliTests(unittest.TestCase):
             app.activate_current()
             self.assertEqual(app.mode, "message")
             self.assertTrue(calls)
+            self.assertIsNotNone(calls[0][0].generation_summary_text)
+            self.assertIn("AI Generation Summary", calls[0][0].generation_summary_text)
+            self.assertIn("generation_summary.txt", app.message_body)
+
+    def test_new_ai_cycle_starts_with_clean_input_box(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            config_path = self._make_config(temp_dir, setup_completed=True)
+            fake_ai = FakeAIService()
+
+            def _runner(request, config):  # noqa: ANN001, ANN202
+                del request, config
+                output_dir = Path(temp_dir) / "generated" / "ai"
+                output_dir.mkdir(parents=True, exist_ok=True)
+                rendered_main = output_dir / "main.tex"
+                rendered_main.write_text("test", encoding="utf-8")
+                return GenerationResult(output_dir=output_dir, rendered_main=rendered_main, pdf_path=None)
+
+            app = ResumeCLIApp(
+                config_path=config_path,
+                generation_runner=_runner,
+                ai_service=fake_ai,  # type: ignore[arg-type]
+                api_key_loader=lambda _path: "sk-or-v1-demo1234",
+                api_key_saver=lambda value, path: None,
+                env_path=Path(temp_dir) / ".env",
+            )
+
+            app.selection_index = 0
+            app.activate_current()
+            app.activate_current()
+            app.activate_current()
+            app.submit_input("Old job description text.")
+            app.activate_current()
+            app.close_message()
+
+            app.selection_index = 0
+            app.activate_current()
+            app.activate_current()
+            app.activate_current()
+
+            self.assertEqual(app.mode, "input")
+            self.assertEqual(app.input_buffer.text, "")
+            self.assertEqual(app.session.job_description, "")
 
 
 if __name__ == "__main__":

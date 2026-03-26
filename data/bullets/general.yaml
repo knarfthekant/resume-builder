@@ -1,18 +1,18 @@
 summary_options:
   - id: general_fullstack
     text: >
-      \textbf{Full-stack} developer specialized in translating \textbf{business requirements into production-ready}
+      Full-stack developer specialized in translating business requirements into production-ready
       systems. Shipped customer-facing software across backend, cloud infrastructure, and AI-assisted workflows with strong ownership.
     tags: [full-stack, product, execution]
 
   - id: ai_automation
     text: >
-      Engineer focused on \textbf{AI systems and automation}, building retrieval, agentic workflows, and developer tooling that integrate LLMs with reliable backend infrastructure and measurable outcomes.
+      Engineer focused on AI systems and automation, building retrieval, agentic workflows, and developer tooling that integrate LLMs with reliable backend infrastructure and measurable outcomes.
     tags: [ai, automation, backend]
 
   - id: backend_platform
     text: >
-      Backend-leaning builder experienced in \textbf{distributed system design}, data modeling, and performance optimization, with a focus on correctness, scalability, and maintainability.
+      Backend-leaning builder experienced in distributed system design, data modeling, and performance optimization, with a focus on correctness, scalability, and maintainability.
     tags: [backend, systems, architecture]
 
 
@@ -20,82 +20,89 @@ experience:
   ziyutec:
     - id: ziyutec_sdlc
       text: >
-        \textbf{Owned} end-to-end architecture and delivery of a \hrefWithoutArrow{https://neshub.net}{global B2B marketplace}, leading
-        system design, backend/frontend implementation, and AWS deployment across the \textbf{entire SDLC} in a 3-engineer team.
-      tags: [product, architecture, aws, ownership]
+        Owned end-to-end architecture and delivery of a \hrefWithoutArrow{https://neshub.net}{global B2B marketplace}, leading
+        system design, backend/frontend implementation, and deployment (AWS) across the entire SDLC.
+      tags: [product, architecture, aws, ownership, leadership]
 
     - id: ziyutec_system_design
       text: >
-        Designed a modular \textbf{service-oriented architecture} (NestJS + PostgreSQL + Redis), enabling independent feature evolution,
-        fault isolation, and scalable backend growth.
-      tags: [backend, architecture, systems]
+        Designed a modular service-oriented architecture, enabling independent feature evolution, fault isolation, and scalable backend growth.
+      tags: [backend, architecture, systems, design]
 
     - id: ziyutec_rbac
       text: >
-        Architected a flexible \textbf{RBAC authorization system} supporting hierarchical roles and organization-level permissions,
-        balancing \textbf{normalization} with \textbf{query efficiency} via selective denormalization.
-      tags: [backend, authorization, database]
+        Architected a flexible RBAC authorization system supporting 4 distinct user identities and 3 permission levels; denormalized database schema 
+        to balance query efficiency with normalization.
+      tags: [backend, auth, database, systems]
 
-    - id: ziyutec_transactions
+    - id: ziyutec_session
       text: >
-        Enforced \textbf{ACID-safe transactional workflows} for multi-step operations (e.g., onboarding, verification), improving data
-        consistency and eliminating partial-write edge cases.
-      tags: [backend, database, transactions]
-
-    - id: ziyutec_caching
-      text: >
-        Engineered a \textbf{caching and state synchronization layer} (Redis) to decouple frontend interactions from
-        \textbf{atomic database transactions}, improving responsiveness while preserving consistency guarantees.
-      tags: [backend, caching, performance]
-
-    - id: ziyutec_search
-      text: >
-        Built a \textbf{semantic search system} (OpenSearch) with hybrid lexical + vector retrieval and ranking, enabling
-        automated resource discovery and recommendation workflows.
-      tags: [search, backend, ai]
-
-    - id: ziyutec_file_pipeline
-      text: >
-        Designed a secure \textbf{file upload pipeline} using S3 presigned URLs, reducing backend load and enabling scalable,
-        direct-to-storage uploads for large assets.
-      tags: [aws, backend, storage]
-
-    - id: ziyutec_workflow_agent
-      text: >
-        Developed an internal \textbf{workflow automation agent} integrating database queries and backend tools, reducing
-        manual operational workload by \textbf{20\%} across a \textbf{50-person} team.
-      tags: [automation, ai, productivity]
-
-    - id: ziyutec_rag
-      text: >
-        Built a \textbf{RAG system} indexing \textbf{1,000+ enterprise documents}, improving retrieval \textbf{faithfulness and
-        contextual relevance by 16\%} (DeepEval) via hybrid search, reranking, and context-aware chunking.
-      tags: [rag, search, evaluation]
-
-    - id: ziyutec_auth
-      text: >
-        Implemented \textbf{JWT-based authentication with refresh token rotation}, resolving session persistence issues and improving
-        reliability of long-running user workflows.
+        Implemented JWT-based authentication with refresh token rotation, resolving session persistence issues affecting users for 3+ months
+        and improving reliability of long-running user workflows.
       tags: [backend, auth, security]
 
     - id: ziyutec_legacy
       text: >
-        Maintained and extended a \textbf{multi-tenant ERP system} (60K+ LOC) supporting \textbf{1,000+ active projects}, improving
+        Maintained and extended a multi-tenant ERP system (60K+ LOC) supporting 1,000+ active projects, improving
         stability and debugging efficiency in a legacy codebase.
       tags: [legacy, reliability, systems]
+    
+    - id: ziyutec_caching
+      text: >
+        Engineered a caching and state synchronization layer (Redis) to decouple frontend interactions from
+        atomic database transactions, improving responsiveness while preserving consistency guarantees.
+      tags: [fullstack, frontend, caching, performance]
+
+    - id: ziyutec_search
+      text: >
+        Built a low latency search system with hybrid lexical + vector retrieval and ranking, enabling
+        automated resource discovery and recommendation workflows.
+      tags: [search, backend, ai]
+
+    - id: ziyutec_file_worker
+      text: >
+        Improved data consistency and fault tolerance by designing a soft-delete-based file lifecycle management
+        system, backed by a worker queue to clean up failed uploads and deletion events; ensured state synchronization with AWS S3.
+      tags: [backend, worker, distributed]
+
+    - id: ziyutec_file_pipeline
+      text: >
+        Engineered direct-to-object-storage uploads for large assets using AWS S3 presigned URLs; implemented end-to-end integrity validation 
+        (local + cloud checksum verification) to ensure data consistency at scale.
+      tags: [aws, backend, storage, distributed]
+
+    - id: ziyutec_workflow_agent
+      text: >
+        Developed a workflow automation agent that orchestrates database queries and form submission via structured tool use, reducing manual 
+        operational workload by 20% across a 50-person team.
+      tags: [automation, ai, productivity]
+
+    - id: ziyutec_rag
+      text: >
+        Built a production-grade RAG system over 1,000+ enterprise documents, leveraging hybrid search, reranking, and context-aware
+        chunking to optimize retrieval quality, improving faithfulness and contextual relevance by 16% (DeepEval).
+      tags: [rag, search, retrieval]
+
+    - id: ziyutec_rag_pipeline
+      text: >
+        Designed a RAG evaluation pipeline with synthetic dataset generation to benchmark agent performance
+        on business requirements; established automated evaluation loops (DeepEval) to systematically measure and iterate
+        on retrieval and response quality.
+      tags: [evaluation, rag, llm]
+
 
 
   uw_research:
     - id: research_neurosymbolic
       text: >
         Designed experiments for a probabilistic programming system (PAL) compiling symbolic constraints into tensor operations,
-        enabling \textbf{neuro-symbolic training} with strict structural guarantees.
+        enabling neuro-symbolic training with strict structural guarantees.
       tags: [research, ml, neurosymbolic]
 
     - id: research_ner_constraints
       text: >
         Built a hybrid NER pipeline combining frozen language model embeddings with constraint-based decoding,
-        improving \textbf{prediction validity} and early-stage training stability.
+        improving prediction validity and early-stage training stability.
       tags: [ml, nlp, research]
 
     - id: research_experiments
@@ -109,14 +116,13 @@ projects:
   mini_vlm:
     - id: vlm_model
       text: >
-        Built a LLaVA-style \textbf{Vision-Language Model}, integrating \textbf{SigLIP-2} with \textbf{Qwen3-0.6B} via a modality projector,
-        achieving \textbf{32.9\% zero-shot MMStar accuracy} under a \textbf{1B parameter} constraint.
+        Built a LLaVA-style Vision-Language Model, integrating SigLIP-2 with Qwen3-0.6B via a modality projector,
+        achieving 32.9\% zero-shot MMStar accuracy under a 1B parameter constraint.
       tags: [python, pytorch, multimodal, ml]
 
     - id: vlm_training_pipeline
       text: >
-        Designed a high-throughput multimodal training pipeline with \textbf{dynamic batching} and token-aware scheduling,
-        maximizing GPU utilization on \textbf{16GB VRAM hardware}.
+        Designed a high-throughput multimodal training pipeline with a greedy knapsack batching algorithm, improving GPU utilization by 15\%.
       tags: [python, systems, ml]
 
     - id: vlm_efficiency
@@ -129,52 +135,77 @@ projects:
   mini_vllm:
     - id: vllm_engine
       text: >
-        Built a lightweight \textbf{LLM inference engine} with continuous batching, request scheduling, and pluggable
-        \textbf{paged KV-cache} architecture for efficient memory management.
+        Built a lightweight LLM inference engine with continuous batching, request scheduling, and
+        paged KV-cache architecture for efficient memory management.
       tags: [python, inference, systems]
 
     - id: vllm_scheduler
       text: >
-        Implemented a custom \textbf{scheduler and block manager} to coordinate sequence execution and KV memory allocation,
+        Implemented a custom scheduler and block manager to coordinate sequence execution and KV memory allocation,
         improving GPU utilization under concurrent workloads.
       tags: [systems, gpu, inference]
 
     - id: vllm_benchmarking
       text: >
-        Developed a ShareGPT-based benchmarking suite, achieving up to \textbf{59\% higher throughput} and reduced
-        time-to-first-token (TTFT) with paged attention.
+        Developed an A/B testing framework with a pluggable cache manager, enabling side-by-side benchmarking of paged vs. standard attention,
+        achieving up to 59 percent higher throughput and reduced time-to-first-token (TTFT).
       tags: [benchmarking, systems, llm]
 
 
   goodline_inventory:
-    - id: inventory_system
+    - id: inventory_serialized_tracking
       text: >
-        Built a \textbf{full-stack inventory system} with real-time stock tracking, order flows, and authentication,
-        serving as a single source of truth for inventory operations.
-      tags: [fullstack, database, systems]
+        Built a per-unit inventory tracking system using unique serial numbers, allowing each item to be traced
+        across inbound and outbound operations.
+      tags: [database, modeling, systems]
 
-    - id: inventory_modeling
+    - id: inventory_workflow_integrity
       text: >
-        Designed relational schemas supporting per-unit tracking (serial numbers) and inbound/outbound linkage,
-        ensuring traceability and data integrity.
-      tags: [database, design]
+        Implemented order workflows that link outbound shipments to contracts and line items,
+        ensuring consistency across transactions by maintaining a single source of truth.
+      tags: [backend, systems, integrity]
 
-
-  resume_builder:
-    - id: resume_builder_agent
+    - id: inventory_workflow_analytics
       text: >
-        Built a \textbf{multi-step resume generation agent} (LangGraph) that maps experience to job descriptions via
-        structured reasoning and template-driven generation.
-      tags: [python, langgraph, llm]
+        Developed an analytics dashboard with role-based access control (RBAC) to visualize inventory health and transaction
+        history, and enable generation of printable documents for operational workflows.
+      tags: [fullstack, product, frontend]
 
-    - id: resume_builder_hitl
+  cc3k:
+    - id: cc3k_engine_design
       text: >
-        Implemented a \textbf{human-in-the-loop refinement loop}, enabling iterative constraint-based editing of generated
-        resumes with real-time feedback.
-      tags: [llm, systems]
+        Built a modular C++ command-line rogue-like engine using Decorator pattern to extend player abilities and potion effects
+        at runtime, enabling flexible composition of buffs and status modifiers.
+      tags: [c++, design-patterns, systems]
 
-    - id: resume_builder_rendering
+    - id: cc3k_combat_observer
       text: >
-        Integrated \textbf{LaTeX templating (Jinja2)} and automated compilation pipelines to generate consistent,
-        production-ready PDF resumes.
-      tags: [automation, tooling]
+        Implemented combat and damage handling using the Observer pattern, decoupling event propagation between entities
+        (player, enemies, items) to support reactive effects and clean state updates.
+      tags: [design-patterns, systems, architecture]
+
+    - id: cc3k_generation_cli
+      text: >
+        Designed entity and map generation with the Factory pattern and seeded random engine, supporting reproducible gameplay
+        and configurable dungeon layouts via CLI input files.
+      tags: [c++, cli, systems]
+
+  snapplot:
+    - id: snapplot_multiplayer
+      text: >
+        Built a real-time multiplayer system using WebSockets (Socket.io) to synchronize game state,
+        player actions, and timed reveal events across clients with low-latency updates.
+      tags: [realtime, websockets, backend]
+
+    - id: snapplot_game_system
+      text: >
+        Developed a cross-platform mobile game featuring live camera-based scavenger hunts,
+        enabling users to capture and submit photos tied to dynamic prompts during gameplay.
+      tags: [frontend, mobile, product]
+
+    - id: snapplot_ai_pipeline
+      text: >
+        Integrated GenAI-powered story generation to transform user-submitted images into
+        a cohesive narrative, with server-side image processing for optimized uploads and consistency.
+      tags: [ai, backend, systems]
+

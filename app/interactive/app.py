@@ -25,6 +25,7 @@ from app.compiler import LatexCompilationError
 from app.config import DEFAULT_CONFIG_PATH, load_config, save_config
 from app.data_loader import list_relative_yaml_files, load_bullet_library, load_resume_profile
 from app.env import get_openrouter_api_key, mask_api_key, save_openrouter_api_key
+from app.generation_summary import build_generation_summary_text
 from app.interactive.rendering import (
     MARKUP_BOLD_CLOSE,
     MARKUP_BOLD_OPEN,
@@ -33,6 +34,7 @@ from app.interactive.rendering import (
     MARKUP_LABEL_CLOSE,
     MARKUP_LABEL_OPEN,
     box_lines,
+    compact_header_lines,
     header_lines,
     render_ansi,
 )
@@ -175,6 +177,7 @@ class ResumeCLIApp:
         self.config = load_config(self.config_path)
         self.session.profile_name = self.config.active_profile
         self.session.bullet_library_name = self.config.active_bullet_library
+        self._reset_session_transient()
         if not isinstance(self.ai_service, AISelectionService):
             return
         self.ai_service = AISelectionService(config=self.config, env_path=self.env_path)
@@ -237,7 +240,7 @@ class ResumeCLIApp:
         ]
 
     def render_text(self) -> str:
-        lines = header_lines()
+        lines = header_lines() if self.mode == "main_menu" else compact_header_lines()
         if self.mode == "setup_choice":
             lines.extend(self._render_setup_choice_lines())
         elif self.mode == "main_menu":
@@ -443,6 +446,7 @@ class ResumeCLIApp:
     def _enter_main_menu(self, notice: str | None = None) -> None:
         self.mode = "main_menu"
         self.selection_index = 0
+        self._reset_session_transient()
         if notice is not None:
             self.notice = notice
         self._reset_overlay_state()
@@ -477,12 +481,23 @@ class ResumeCLIApp:
         self.loading_message = ""
         self.loading_frame_index = 0
 
+    def _reset_session_transient(self) -> None:
+        self.session.profile = None
+        self.session.library = None
+        self.session.selection = None
+        self.session.job_description = ""
+        self.session.ai_suggestion = None
+        self.manual_steps = []
+        self.manual_step_index = 0
+
     def _activate_main_menu_item(self) -> bool:
         action = MAIN_MENU_ITEMS[self.selection_index].value
         if action == "generate_ai":
+            self._reset_session_transient()
             self._start_profile_choice(flow="ai")
             return True
         if action == "generate_manual":
+            self._reset_session_transient()
             self._start_profile_choice(flow="manual")
             return True
         if action == "edit_config":
@@ -620,7 +635,7 @@ class ResumeCLIApp:
         self._enter_input_mode(
             title="job description",
             prompt="jd",
-            current_text=self.session.job_description,
+            current_text="",
             multiline=True,
             submit_handler=self._submit_job_description,
             cancel_handler=lambda: self._start_library_choice(flow="ai"),
@@ -793,6 +808,7 @@ class ResumeCLIApp:
                     bullet_library_name=self.session.bullet_library_name,
                     selection=self.session.selection,
                     job_description=self.session.job_description or None,
+                    generation_summary_text=self._current_generation_summary_text(),
                 ),
                 self.config,
             )
@@ -807,6 +823,7 @@ class ResumeCLIApp:
 
     def _handle_generation_success(self, title: str, result) -> None:  # noqa: ANN001
         pdf_line = str(result.pdf_path) if getattr(result, "pdf_path", None) else "not generated"
+        summary_line = str(result.summary_path) if getattr(result, "summary_path", None) else "not generated"
         self.open_message(
             title,
             "\n".join(
@@ -814,6 +831,7 @@ class ResumeCLIApp:
                     f"output directory : {result.output_dir}",
                     f"rendered latex   : {result.rendered_main}",
                     f"pdf              : {pdf_line}",
+                    f"summary          : {summary_line}",
                 ]
             ),
         )
@@ -1033,6 +1051,23 @@ class ResumeCLIApp:
             "keys: up/down or j/k move, enter select, esc back",
             f"status: {self.notice}",
         ]
+
+    def _current_generation_summary_text(self) -> str | None:
+        if (
+            self.session.ai_suggestion is None
+            or self.session.profile is None
+            or self.session.library is None
+            or not self.session.job_description.strip()
+        ):
+            return None
+        return build_generation_summary_text(
+            profile_name=self.session.profile_name,
+            bullet_library_name=self.session.bullet_library_name,
+            job_description=self.session.job_description,
+            suggestion=self.session.ai_suggestion,
+            profile=self.session.profile,
+            library=self.session.library,
+        )
 
     def _render_message_lines(self) -> list[str]:
         return box_lines(self.message_title, self.message_body.splitlines() or [""]) + [
@@ -1370,6 +1405,10 @@ def main(argv: list[str] | None = None) -> None:
             print(f"PDF: {result.pdf_path}")
         else:
             print("PDF: not generated")
+        if result.summary_path:
+            print(f"Summary: {result.summary_path}")
+        else:
+            print("Summary: not generated")
         return
 
     if args.command in {None, "cli", "tui"}:

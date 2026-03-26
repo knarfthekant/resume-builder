@@ -60,10 +60,10 @@ class AITypesTests(unittest.TestCase):
             ],
             projects=[
                 SelectedSection(
-                    entry_id="resume_builder",
+                    entry_id="mini_vlm",
                     bullets=[
-                        SelectedBullet(bullet_id="resume_builder_agent"),
-                        SelectedBullet(bullet_id="resume_builder_hitl"),
+                        SelectedBullet(bullet_id="vlm_model"),
+                        SelectedBullet(bullet_id="vlm_training_pipeline"),
                     ],
                 ),
                 SelectedSection(
