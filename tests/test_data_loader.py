@@ -14,7 +14,7 @@ class DataLoaderTests(unittest.TestCase):
         profile = load_resume_profile(PROJECT_ROOT / "data" / "profiles" / "general.yaml")
         self.assertEqual(profile.candidate_name, "Frank Shan")
         self.assertEqual(profile.min_experience_entries, 1)
-        self.assertEqual(profile.max_project_entries, 4)
+        self.assertEqual(profile.max_project_entries, 3)
         self.assertGreaterEqual(len(profile.experience_entries), 1)
         self.assertGreaterEqual(len(profile.project_entries), 1)
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import shutil
 import threading
 import time
 from dataclasses import dataclass, field
@@ -17,6 +18,7 @@ from prompt_toolkit.layout import ConditionalContainer, DynamicContainer, HSplit
 from prompt_toolkit.layout.controls import BufferControl, FormattedTextControl
 from prompt_toolkit.styles import Style
 from prompt_toolkit.widgets import Frame
+from wcwidth import wcswidth
 
 from app.ai.client import AIConfigurationError
 from app.ai.service import AISuggestionResult, AISelectionService
@@ -261,6 +263,7 @@ class ResumeCLIApp:
             lines.extend(self._render_message_lines())
         else:
             lines.append("unknown mode")
+        lines = self._clip_visible_lines(lines)
         return "\n".join(lines)
 
     def render_ansi(self) -> str:
@@ -636,11 +639,11 @@ class ResumeCLIApp:
             title="job description",
             prompt="jd",
             current_text="",
-            multiline=True,
+            multiline=False,
             submit_handler=self._submit_job_description,
             cancel_handler=lambda: self._start_library_choice(flow="ai"),
         )
-        self.notice = "paste the job description, then press ctrl+s"
+        self.notice = "enter the job description, then press enter"
 
     def _submit_job_description(self, value: str) -> None:
         if not value:
@@ -690,7 +693,7 @@ class ResumeCLIApp:
                 title="tell ai otherwise",
                 prompt="feedback",
                 current_text="",
-                multiline=True,
+                multiline=False,
                 submit_handler=self._submit_ai_feedback,
                 cancel_handler=lambda: self._enter_ai_review(
                     AISuggestionResult(
@@ -699,7 +702,7 @@ class ResumeCLIApp:
                     )
                 ),
             )
-            self.notice = "describe what the AI should change, then press ctrl+s"
+            self.notice = "describe what the AI should change, then press enter"
             return
         if action == "cancel":
             self._enter_main_menu("cancelled ai generation")
@@ -1239,10 +1242,27 @@ class ResumeCLIApp:
         return "[" + ("=" * filled).ljust(10, ".") + "]"
 
     def _input_window_height(self) -> int:
-        if not self.input_multiline:
-            return 1
-        line_count = self.input_buffer.text.count("\n") + 1
-        return max(4, min(10, line_count + 1))
+        width = max(16, shutil.get_terminal_size(fallback=(120, 40)).columns - 6)
+        text = self.input_buffer.text or ""
+        segments = text.splitlines() or [""]
+        visual_lines = 0
+        for segment in segments:
+            display_width = max(1, wcswidth(segment))
+            visual_lines += max(1, (display_width + width - 1) // width)
+        return max(1, min(4, visual_lines))
+
+    def _clip_visible_lines(self, lines: list[str]) -> list[str]:
+        terminal_lines = shutil.get_terminal_size(fallback=(120, 40)).lines
+        available_lines = max(1, terminal_lines - self._reserved_layout_lines())
+        if len(lines) <= available_lines:
+            return lines
+        return lines[-available_lines:]
+
+    def _reserved_layout_lines(self) -> int:
+        if self.mode != "input":
+            return 0
+        frame_height = self._input_window_height()
+        return frame_height + 2
 
     def _invalidate(self) -> None:
         if self.application is not None:
@@ -1321,10 +1341,11 @@ class ResumeCLIApp:
     def _build_application(self) -> Application[None]:
         body_control = FormattedTextControl(lambda: ANSI(self.render_ansi()))
         self.body_window = Window(content=body_control, always_hide_cursor=True, dont_extend_height=True)
-        self.single_input_window = Window(content=self.input_control, height=1)
+        self.single_input_window = Window(content=self.input_control, height=1, wrap_lines=True)
         self.multi_input_window = Window(content=self.input_control, height=8, wrap_lines=True)
 
         def _build_single_input_frame():
+            self.single_input_window.height = self._input_window_height()
             return Frame(self.single_input_window, title=self.input_title, style="class:frame")
 
         def _build_multi_input_frame():
