@@ -726,7 +726,7 @@ class ResumeCLIApp:
                     details=[
                         f"location: {entry.location}",
                         f"dates: {entry.date_range}",
-                        f"pick up to {entry.max_bullets} bullets",
+                        f"pick {entry.min_bullets}-{entry.max_bullets} bullets when this entry is included",
                     ],
                 )
             )
@@ -735,7 +735,7 @@ class ResumeCLIApp:
             options = library.projects.get(entry.id, [])
             if not options:
                 continue
-            details = [f"tech: {entry.tech_stack}", f"pick up to {entry.max_bullets} bullets"]
+            details = [f"tech: {entry.tech_stack}", f"pick {entry.min_bullets}-{entry.max_bullets} bullets when included"]
             if entry.link_url:
                 details.insert(1, f"link: {entry.link_url}")
             steps.append(

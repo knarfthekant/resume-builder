@@ -7,6 +7,10 @@ github_url: https://github.com/knarfthekant
 github_handle: knarfthekant
 portfolio_url: https://frank-shan.vercel.app
 portfolio_label: portfolio
+min_experience_entries: 1
+max_experience_entries: 2
+min_project_entries: 2
+max_project_entries: 4
 education:
   - institution: University of Waterloo
     degree: Bachelor of Computer Science, Honours Computer Science, AI Specialization
@@ -28,17 +32,19 @@ certificates:
     cert_url: https://example.com/certificates/xcs224n
     cert_label: credential
 experience_entries:
-  - id: ziyutec_marketplace
+  - id: ziyutec
     title: Software Developer Intern
     location: Richmond, BC
     date_range: Sep 2025 -- Apr 2026
     company: Ziyutec Inc.
-    max_bullets: 4
-  - id: uw_research_ner
+    min_bullets: 4
+    max_bullets: 6
+  - id: uw_research
     title: Research Assistant
     location: Waterloo, ON
     date_range: Feb 2026 -- Present
     company: University of Waterloo
+    min_bullets: 1
     max_bullets: 2
 project_entries:
   - id: mini_vlm
@@ -46,31 +52,34 @@ project_entries:
     tech_stack: Python, PyTorch, SigLIP-2, Qwen3-0.6B
     link_url: https://github.com/knarfthekant/mini_vlm
     link_label: github
+    min_bullets: 1
     max_bullets: 2
   - id: mini_vllm
     name: Mini VLLM
     tech_stack: Python, PyTorch
     link_url: https://github.com/knarfthekant/mini_vllm
     link_label: github
+    min_bullets: 1
     max_bullets: 2
   - id: goodline_inventory
     name: Goodline Inventory
     tech_stack: Python, Next.js, PostgreSQL
     link_url: https://github.com/knarfthekant/goodline_inventory
     link_label: github
+    min_bullets: 1
     max_bullets: 2
   - id: resume_builder
     name: Resume Builder
     tech_stack: Python, Jinja2, prompt\_toolkit, LaTeX, LangGraph
     link_url: https://github.com/knarfthekant/resume_builder
     link_label: github
+    min_bullets: 1
     max_bullets: 2
   - id: cc3k
     name: CC3K
     tech_stack: C++
     link_url: https://github.com/Weidoorfin/CS246-CC3K
     link_label: github
+    min_bullets: 1
     max_bullets: 2
-     
-    
     

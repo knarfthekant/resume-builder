@@ -15,11 +15,13 @@ class ManualSelectionService:
         if library.summary_options:
             selection.summary_id = library.summary_options[0].id
 
-        for entry in profile.experience_entries:
+        active_experience = profile.experience_entries[: profile.max_experience_entries]
+        for entry in active_experience:
             options = library.experience.get(entry.id, [])
             selection.experience[entry.id] = [option.id for option in options[: entry.max_bullets]]
 
-        for entry in profile.project_entries:
+        active_projects = profile.project_entries[: profile.max_project_entries]
+        for entry in active_projects:
             options = library.projects.get(entry.id, [])
             selection.projects[entry.id] = [option.id for option in options[: entry.max_bullets]]
 
@@ -38,6 +40,8 @@ class ManualSelectionService:
 
         experience_map = {entry.id: entry for entry in profile.experience_entries}
         project_map = {entry.id: entry for entry in profile.project_entries}
+        active_experience_entries = 0
+        active_project_entries = 0
 
         for entry_id, selected_ids in selection.experience.items():
             if entry_id not in experience_map:
@@ -48,6 +52,13 @@ class ManualSelectionService:
             invalid = [bullet_id for bullet_id in selected_ids if bullet_id not in available]
             if invalid:
                 raise SelectionValidationError(f"Unknown experience bullets for {entry_id}: {', '.join(invalid)}")
+            if selected_ids:
+                active_experience_entries += 1
+                if len(selected_ids) < experience_map[entry_id].min_bullets:
+                    raise SelectionValidationError(
+                        f"Selected too few experience bullets for {entry_id}: "
+                        f"{len(selected_ids)} < {experience_map[entry_id].min_bullets}"
+                    )
             if len(selected_ids) > experience_map[entry_id].max_bullets:
                 raise SelectionValidationError(
                     f"Selected too many experience bullets for {entry_id}: "
@@ -63,11 +74,35 @@ class ManualSelectionService:
             invalid = [bullet_id for bullet_id in selected_ids if bullet_id not in available]
             if invalid:
                 raise SelectionValidationError(f"Unknown project bullets for {entry_id}: {', '.join(invalid)}")
+            if selected_ids:
+                active_project_entries += 1
+                if len(selected_ids) < project_map[entry_id].min_bullets:
+                    raise SelectionValidationError(
+                        f"Selected too few project bullets for {entry_id}: "
+                        f"{len(selected_ids)} < {project_map[entry_id].min_bullets}"
+                    )
             if len(selected_ids) > project_map[entry_id].max_bullets:
                 raise SelectionValidationError(
                     f"Selected too many project bullets for {entry_id}: "
                     f"{len(selected_ids)} > {project_map[entry_id].max_bullets}"
                 )
+
+        if active_experience_entries < profile.min_experience_entries:
+            raise SelectionValidationError(
+                f"Selected too few experience entries: {active_experience_entries} < {profile.min_experience_entries}"
+            )
+        if active_experience_entries > profile.max_experience_entries:
+            raise SelectionValidationError(
+                f"Selected too many experience entries: {active_experience_entries} > {profile.max_experience_entries}"
+            )
+        if active_project_entries < profile.min_project_entries:
+            raise SelectionValidationError(
+                f"Selected too few project entries: {active_project_entries} < {profile.min_project_entries}"
+            )
+        if active_project_entries > profile.max_project_entries:
+            raise SelectionValidationError(
+                f"Selected too many project entries: {active_project_entries} > {profile.max_project_entries}"
+            )
 
         return selection
 

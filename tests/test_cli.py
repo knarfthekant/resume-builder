@@ -38,10 +38,10 @@ class FakeAIService:
                 ],
                 projects=[
                     SelectedSection(
-                        entry_id="resume_builder_v1",
+                        entry_id="resume_builder",
                         bullets=[
                             SelectedBullet(
-                                bullet_id="resume_ai",
+                                bullet_id="resume_builder_agent",
                                 rationale="Directly matches the AI selection workflow.",
                             )
                         ],
@@ -52,7 +52,7 @@ class FakeAIService:
             selection=ResumeSelection(
                 summary_id="ai_automation",
                 experience={"ziyutec_marketplace": ["ziyutec_rag", "ziyutec_workflow_agent"]},
-                projects={"resume_builder_v1": ["resume_ai"]},
+                projects={"resume_builder": ["resume_builder_agent"]},
             ),
         )
 

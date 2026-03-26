@@ -26,14 +26,16 @@ def build_prompt(
     experience_lines = []
     for entry in profile.experience_entries:
         experience_lines.append(
-            f"Experience {entry.id} ({entry.title} at {entry.company}, max {entry.max_bullets} bullets):"
+            f"Experience {entry.id} ({entry.title} at {entry.company}, min {entry.min_bullets}, max {entry.max_bullets} bullets):"
         )
         for option in library.experience.get(entry.id, []):
             experience_lines.append(f"  {_format_option_line(option)}")
 
     project_lines = []
     for entry in profile.project_entries:
-        project_lines.append(f"Project {entry.id} ({entry.name}, max {entry.max_bullets} bullets):")
+        project_lines.append(
+            f"Project {entry.id} ({entry.name}, min {entry.min_bullets}, max {entry.max_bullets} bullets):"
+        )
         for option in library.projects.get(entry.id, []):
             project_lines.append(f"  {_format_option_line(option)}")
 
@@ -41,6 +43,8 @@ def build_prompt(
         "You are selecting resume content for a job application.\n"
         "Choose bullet IDs from the provided inventory, keep claims truthful, and only rewrite bullets when it materially helps alignment.\n"
         "Do not invent companies, impact, or technologies.\n\n"
+        f"Select between {profile.min_experience_entries} and {profile.max_experience_entries} experience entries.\n"
+        f"Select between {profile.min_project_entries} and {profile.max_project_entries} project entries.\n\n"
         f"Job description:\n{job_description}\n\n"
         f"User feedback to incorporate:\n{feedback or '(none)'}\n\n"
         f"Previous suggestion:\n{previous_suggestion or '(none)'}\n\n"
@@ -54,8 +58,6 @@ def _format_option_line(option) -> str:
     parts = [f"- {option.id}: {option.text}"]
     if option.tags:
         parts.append(f"tags={', '.join(option.tags)}")
-    if option.evidence:
-        parts.append(f"evidence={option.evidence}")
     return " | ".join(parts)
 
 

@@ -21,6 +21,7 @@ class SelectionTests(unittest.TestCase):
         context = SelectionApplier().build_render_context(self.profile, self.library, selection)
         self.assertTrue(context["highlights"]["summary"])
         self.assertGreaterEqual(len(context["experience"]), 1)
+        self.assertLessEqual(len(context["projects"]), self.profile.max_project_entries)
 
     def test_invalid_selection_raises_for_unknown_bullet(self) -> None:
         with self.assertRaises(SelectionValidationError):
@@ -45,6 +46,30 @@ class SelectionTests(unittest.TestCase):
                             "ziyutec_rag",
                         ]
                     }
+                ),
+            )
+
+    def test_invalid_selection_raises_for_too_few_entry_bullets(self) -> None:
+        with self.assertRaises(SelectionValidationError):
+            self.service.validate_selection(
+                self.profile,
+                self.library,
+                ResumeSelection(experience={"ziyutec_marketplace": ["ziyutec_sdlc"]}),
+            )
+
+    def test_invalid_selection_raises_for_too_many_project_entries(self) -> None:
+        with self.assertRaises(SelectionValidationError):
+            self.service.validate_selection(
+                self.profile,
+                self.library,
+                ResumeSelection(
+                    experience={"ziyutec_marketplace": ["ziyutec_sdlc", "ziyutec_rbac"]},
+                    projects={
+                        "mini_vlm": ["vlm_model"],
+                        "mini_vllm": ["vllm_engine"],
+                        "goodline_inventory": ["inventory_system"],
+                        "resume_builder": ["resume_builder_agent"],
+                    },
                 ),
             )
 

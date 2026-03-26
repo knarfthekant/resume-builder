@@ -16,58 +16,50 @@ summary_options:
     tags: [backend, systems, architecture]
 
 experience:
-  ziyutec_marketplace:
+  ziyutec:
     - id: ziyutec_sdlc
       text: >
         \textbf{Owned} the end-to-end planning and development of a \hrefWithoutArrow{https://neshub.net}{global B2B marketplace}
         for a startup initiative, \textbf{leading} system design, implementation, and deployment (AWS) across the \textbf{entire SDLC}.
       tags: [product, architecture, aws]
-      evidence: Built and launched the marketplace from a blank repository.
     - id: ziyutec_rbac
       text: >
         Architected a Role-Based Access Control framework (NestJS, PostgreSQL) to support extensible user roles; balanced database
         \textbf{normalization} against \textbf{query performance} via denormalization and data \textbf{integrity} checks.
       tags: [backend, authorization, database]
-      evidence: Production RBAC design across platform workflows.
     - id: ziyutec_caching
       text: >
         Engineered a \textbf{caching} layer to decouple client-side state from \textbf{atomic} database transactions, reducing
         \textbf{user friction} while ensuring transactional integrity.
       tags: [backend, transactions, performance]
-      evidence: Reduced UX friction while preserving correctness.
     - id: ziyutec_workflow_agent
       text: >
         Built an automation agent for engineering workflow, reducing operational workload by \textbf{20\%} across a \textbf{50-person}
         engineering team.
       tags: [automation, ai, productivity]
-      evidence: Internal engineering automation deployment.
     - id: ziyutec_rag
       text: >
         Built a \textbf{RAG agent}, indexing \textbf{500+ enterprise documents} of different format; improved \textbf{contextual relevance
         by 16\%} (DeepEval) via \textbf{hybrid search and reranking} on synthetically generated evaluation set.
       tags: [rag, search, evaluation]
-      evidence: DeepEval measured relevance improvement.
     - id: ziyutec_legacy
       text: >
         Maintained and enhanced a \textbf{multi-tenant} ERP platform comprising \textbf{60K+ lines of legacy code}, supporting
         \textbf{1,000+ active projects}. Resolved a \textbf{long-standing} session management defect by implementing
         \textbf{JWT refresh token rotation}, eliminating form data loss.
       tags: [legacy, reliability, auth]
-      evidence: Fixed a persistent production session issue.
-  uw_research_ner:
+  uw_research:
     - id: research_neurosymbolic
       text: >
         Designed comparative experiments for a probabilistic programming language PAL that compiles structural rules into tensor operations.
         Built a \textbf{hybrid neuro-symbolic} framework for training Named Entity Recognition models to enforce strict linguistic
         constraints and improve early-epoch model convergence.
       tags: [research, ml, neurosymbolic]
-      evidence: Research implementation for PAL-based constraint learning.
     - id: research_experiments
       text: >
         Structured reproducible experiments and analysis pipelines for model comparisons, enabling faster iteration on constraint-driven
         NER training strategies.
       tags: [research, experimentation, reproducibility]
-      evidence: Comparative evaluation workflow for model variants.
 
 projects:
   mini_vlm:
@@ -75,38 +67,30 @@ projects:
       text: >
         Built a LLaVA style \textbf{Vision-Language Model}, fusing a \textbf{SigLIP-2} vision encoder with \textbf{Qwen3-0.6B} via a pixel-shuffle modality projector; achieved \textbf{32.9\% zero-shot accuracy on MMStar}.
       tags: [python, pytorch, pretrain, nlp]
-      evidence: Training model from scratch.
     - id: vlm_training_pipeline
       text: >
         Designed a high-throughput training pipeline with a \textbf{greedy knapsack} batching strategy to maximize token-level GPU utilization, enabling efficient multimodal pretraining at \textbf{consumer-scale hardware}.
       tags: [python, data pipeline, pretrain]
-      evidence: Training pipeline design.
   mini_vllm:
     - id: vllm_engine
       text: >
          Built a LLM \textbf{inference engine from scratch}, featuring continuous batching, scheduler-driven execution, and pluggable dense/paged KV-cache backends, with \textbf{prefix caching} for efficient memory reuse.
       tags: [python, inference, llm]
-      evidence: Inference engine design.
     - id: vllm_benchmarking
       text: >
         Designed a ShareGPT-based \textbf{benchmarking} pipeline and demonstrated up to \textbf{59\% higher request throughput} and significantly lower TTFT with paged attention.
       tags: [python, inference, llm]
-      evidence: Benchmarking pipeline design.
   goodline_inventory:
     - id: inventory_system
       text: >
         Built a \textbf{full-stack inventory management system} for a local business, featuring \textbf{real-time stock tracking}, \textbf{order management}, and \textbf{user authentication}.
       tags: [python, nextjs, postgresql, tailwindcss]
-      evidence: Full-stack inventory management system.
   resume_builder:
     - id: resume_builder_agent
       text: >
         Engineered a multi-step resume optimization agent using LangGraph, leveraging stateful workflows to autonomously map professional experience to job descriptions.
       tags: [python, langgraph, llm]
-      evidence: Resume optimization agent design.
     - id: resume_builder_hitl
       text: >
         Implemented an iterative Human-in-the-Loop (HITL) feedback system, enabling real-time refinement of LLM-generated resume content based on user-provided constraints.
       tags: [python, langgraph, llm]
-      evidence: Human-in-the-Loop feedback system design.
-        

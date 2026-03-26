@@ -47,6 +47,7 @@ class ExperienceEntryDefinition:
     location: str
     date_range: str
     company: str
+    min_bullets: int
     max_bullets: int
 
 
@@ -55,6 +56,7 @@ class ProjectEntryDefinition:
     id: str
     name: str
     tech_stack: str
+    min_bullets: int
     max_bullets: int
     link_url: str = ""
     link_label: str = ""
@@ -71,6 +73,10 @@ class ResumeProfile:
     github_handle: str
     portfolio_url: str = ""
     portfolio_label: str = ""
+    min_experience_entries: int = 0
+    max_experience_entries: int = 0
+    min_project_entries: int = 0
+    max_project_entries: int = 0
     education: list[EducationEntry] = field(default_factory=list)
     skills: list[SkillGroup] = field(default_factory=list)
     certificates: list[CertificateEntry] = field(default_factory=list)
@@ -83,7 +89,6 @@ class BulletOption:
     id: str
     text: str
     tags: list[str] = field(default_factory=list)
-    evidence: str = ""
 
 
 @dataclass(slots=True)

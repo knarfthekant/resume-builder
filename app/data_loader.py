@@ -48,6 +48,11 @@ def _require_int(data: dict[str, Any], key: str, *, context: str) -> int:
     return value
 
 
+def _validate_min_max(*, min_value: int, max_value: int, label: str, context: str) -> None:
+    if min_value > max_value:
+        raise ValueError(f"Expected {label} min <= max in {context}: {min_value} > {max_value}")
+
+
 def _list_of_dicts(value: Any, *, key: str, context: str) -> list[dict[str, Any]]:
     if value is None:
         return []
@@ -115,6 +120,7 @@ def load_resume_profile(path: Path) -> ResumeProfile:
             location=_require_string(item, "location", context=context),
             date_range=_require_string(item, "date_range", context=context),
             company=_require_string(item, "company", context=context),
+            min_bullets=_require_int(item, "min_bullets", context=context),
             max_bullets=_require_int(item, "max_bullets", context=context),
         )
         for item in _list_of_dicts(raw.get("experience_entries"), key="experience_entries", context=context)
@@ -125,6 +131,7 @@ def load_resume_profile(path: Path) -> ResumeProfile:
             id=_require_string(item, "id", context=context),
             name=_require_string(item, "name", context=context),
             tech_stack=_require_string(item, "tech_stack", context=context),
+            min_bullets=_require_int(item, "min_bullets", context=context),
             max_bullets=_require_int(item, "max_bullets", context=context),
             link_url=_optional_string(item, "link_url"),
             link_label=_optional_string(item, "link_label"),
@@ -142,6 +149,10 @@ def load_resume_profile(path: Path) -> ResumeProfile:
         github_handle=_require_string(raw, "github_handle", context=context),
         portfolio_url=_optional_string(raw, "portfolio_url"),
         portfolio_label=_optional_string(raw, "portfolio_label"),
+        min_experience_entries=_require_int(raw, "min_experience_entries", context=context),
+        max_experience_entries=_require_int(raw, "max_experience_entries", context=context),
+        min_project_entries=_require_int(raw, "min_project_entries", context=context),
+        max_project_entries=_require_int(raw, "max_project_entries", context=context),
         education=education,
         skills=skills,
         certificates=certificates,
@@ -159,7 +170,6 @@ def _load_bullet_options(value: Any, *, key: str, context: str) -> list[BulletOp
             id=_require_string(item, "id", context=context),
             text=_require_string(item, "text", context=context),
             tags=_list_of_strings(item.get("tags"), key="tags", context=context),
-            evidence=_optional_string(item, "evidence"),
         )
         for item in items
     ]
@@ -174,6 +184,32 @@ def _ensure_unique_entry_ids(profile: ResumeProfile, *, context: str) -> None:
         raise ValueError(f"Duplicate experience entry ids in {context}")
     if len(set(project_ids)) != len(project_ids):
         raise ValueError(f"Duplicate project entry ids in {context}")
+    _validate_min_max(
+        min_value=profile.min_experience_entries,
+        max_value=profile.max_experience_entries,
+        label="experience entry count",
+        context=context,
+    )
+    _validate_min_max(
+        min_value=profile.min_project_entries,
+        max_value=profile.max_project_entries,
+        label="project entry count",
+        context=context,
+    )
+    for entry in profile.experience_entries:
+        _validate_min_max(
+            min_value=entry.min_bullets,
+            max_value=entry.max_bullets,
+            label=f"experience bullets for {entry.id}",
+            context=context,
+        )
+    for entry in profile.project_entries:
+        _validate_min_max(
+            min_value=entry.min_bullets,
+            max_value=entry.max_bullets,
+            label=f"project bullets for {entry.id}",
+            context=context,
+        )
 
 
 def load_bullet_library(path: Path) -> BulletLibrary:
