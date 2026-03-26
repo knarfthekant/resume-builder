@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1774498762.07385 "main.tex" "main.pdf" "main" 1774498762.83096 0
+["pdflatex"] 1774499839.01599 "main.tex" "main.pdf" "main" 1774499839.76281 0
   "/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/fontawesome5/fa5brands0.enc" 1622837620 2920 d63721872b8c77041b88e51b8f7c291d ""
   "/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/fontawesome5/fa5free1.enc" 1622837620 3042 0e2b14b9be7d01075a4c4591d5d1781b ""
   "/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/fontawesome5/fa5free2.enc" 1622837620 2906 e48aa7c95dea478a2e011bcb4f7878c9 ""
@@ -108,14 +108,14 @@
   "/usr/local/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1774492747 5573038 b99aad5e4898a9034e953632f940512b ""
   "/usr/local/texlive/2026/texmf-var/web2c/pdftex/pdflatex.fmt" 1774209607 3636776 dc5fa9b6b1453b9d196cd42edf876004 ""
   "/usr/local/texlive/2026/texmf.cnf" 1774209515 577 648cd9f92f9c0eac486f4c71c85cfbbe ""
-  "main.aux" 1774498762.73274 2015 a6b05cd03c9dda19202343f1ddad39c1 "pdflatex"
-  "main.tex" 1774498761.22129 5360 b0e19210c2d0351a2805b6bb2c966bca ""
-  "sections/certificates.tex" 1774498761.23225 692 7454eadc1c9a409a9d65e721a8a98a72 ""
-  "sections/education.tex" 1774498761.2302 578 e985bbe4c1dfede6bc5a1d405ca78aae ""
-  "sections/experience.tex" 1774498761.22592 2798 9e5b9878f5e022043e34a98464732db8 ""
-  "sections/highlights.tex" 1774498761.23084 470 47ccfff3b7c65533e084683c4acd9055 ""
-  "sections/projects.tex" 1774498761.22765 1360 3453210fdb01fb412dd53b0c14629c09 ""
-  "sections/skills.tex" 1774498761.22857 664 787eedd7cadc069c27c8ab0b4a52bfa7 ""
+  "main.aux" 1774499839.66232 2015 a6b05cd03c9dda19202343f1ddad39c1 "pdflatex"
+  "main.tex" 1774499838.15455 5360 b0e19210c2d0351a2805b6bb2c966bca ""
+  "sections/certificates.tex" 1774499838.16301 692 7454eadc1c9a409a9d65e721a8a98a72 ""
+  "sections/education.tex" 1774499838.16104 578 e985bbe4c1dfede6bc5a1d405ca78aae ""
+  "sections/experience.tex" 1774499838.15687 2798 9e5b9878f5e022043e34a98464732db8 ""
+  "sections/highlights.tex" 1774499838.1617 470 47ccfff3b7c65533e084683c4acd9055 ""
+  "sections/projects.tex" 1774499838.1584 1360 3453210fdb01fb412dd53b0c14629c09 ""
+  "sections/skills.tex" 1774499838.15926 664 2b077d099dd50e9d39b403c9bdf075a8 ""
   (generated)
   "main.aux"
   "main.log"

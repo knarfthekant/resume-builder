@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.22)  25 MAR 2026 21:21
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.22)  25 MAR 2026 21:35
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -393,7 +393,8 @@ LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 130.
  (/usr/local/texlive/2026/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-) (./main.aux)
+)
+No file main.aux.
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 130.
@@ -414,7 +415,6 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 130.
 LaTeX Font Info:    ... okay on input line 130.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 130.
 LaTeX Font Info:    ... okay on input line 130.
-
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -469,7 +469,7 @@ Package hyperref Info: Link coloring ON on input line 130.
 /Users/frankshan/Desktop/Job Application/workspace/templates/resume/main.tex:140: Missing $ inserted.
 <inserted text> 
                 $
-l.140 ...}{24 pt}\selectfont << candidate_name >>}
+l.140 ...}{24 pt}\selectfont [[ candidate_name ]]}
                                                   
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -497,7 +497,7 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 /Users/frankshan/Desktop/Job Application/workspace/templates/resume/main.tex:140: Extra }, or forgotten $.
 <recently read> \egroup 
                         
-l.140 ...}{24 pt}\selectfont << candidate_name >>}
+l.140 ...}{24 pt}\selectfont [[ candidate_name ]]}
                                                   
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -525,7 +525,7 @@ LaTeX Font Info:    Font shape `U/fontawesomebrands0/solid/n' in size <8> not av
 /Users/frankshan/Desktop/Job Application/workspace/templates/resume/main.tex:151: Missing $ inserted.
 <inserted text> 
                 $
-l.151 ...n}\hspace*{0.13cm}<< linkedin_handle >>}}
+l.151 ...n}\hspace*{0.13cm}[[ linkedin_handle ]]}}
                                                   %
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -539,7 +539,7 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 /Users/frankshan/Desktop/Job Application/workspace/templates/resume/main.tex:151: Missing $ inserted.
 <inserted text> 
                 $
-l.151 ...n}\hspace*{0.13cm}<< linkedin_handle >>}}
+l.151 ...n}\hspace*{0.13cm}[[ linkedin_handle ]]}}
                                                   %
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -550,7 +550,7 @@ my insertion and my current dilemma will both disappear.
 /Users/frankshan/Desktop/Job Application/workspace/templates/resume/main.tex:155: Missing $ inserted.
 <inserted text> 
                 $
-l.155 ...hub}\hspace*{0.13cm}<< github_handle >>}}
+l.155 ...hub}\hspace*{0.13cm}[[ github_handle ]]}}
                                                   %
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -558,7 +558,7 @@ you left one out. Proceed, with fingers crossed.
 /Users/frankshan/Desktop/Job Application/workspace/templates/resume/main.tex:155: Missing $ inserted.
 <inserted text> 
                 $
-l.155 ...hub}\hspace*{0.13cm}<< github_handle >>}}
+l.155 ...hub}\hspace*{0.13cm}[[ github_handle ]]}}
                                                   %
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -566,18 +566,10 @@ With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
-/Users/frankshan/Desktop/Job Application/workspace/templates/resume/main.tex:156: Missing $ inserted.
-<inserted text> 
-                $
-l.156         << if portfolio_
-                              url >>
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
 /Users/frankshan/Desktop/Job Application/workspace/templates/resume/main.tex:160: Missing $ inserted.
 <inserted text> 
                 $
-l.160 ...e}\hspace*{0.13cm}<< portfolio_label >>}}
+l.160 ...e}\hspace*{0.13cm}[[ portfolio_label ]]}}
                                                   %
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -585,21 +577,13 @@ you left one out. Proceed, with fingers crossed.
 /Users/frankshan/Desktop/Job Application/workspace/templates/resume/main.tex:160: Missing $ inserted.
 <inserted text> 
                 $
-l.160 ...e}\hspace*{0.13cm}<< portfolio_label >>}}
+l.160 ...e}\hspace*{0.13cm}[[ portfolio_label ]]}}
                                                   %
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
 With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
-
-/Users/frankshan/Desktop/Job Application/workspace/templates/resume/main.tex:163: Missing $ inserted.
-<inserted text> 
-                $
-l.163     \end{header}
-                      
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
 
 /Users/frankshan/Desktop/Job Application/workspace/templates/resume/main.tex:163: Missing } inserted.
 <inserted text> 
@@ -612,15 +596,11 @@ With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
-(./sections/highlights.tex
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 9.
- (/usr/local/texlive/2026/texmf-dist/tex/latex/lm/ts1lmr.fd
-File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)) (./sections/education.tex
+(./sections/highlights.tex) (./sections/education.tex
 ./sections/education.tex:11: Missing $ inserted.
 <inserted text> 
                 $
-l.11 ..."" >> \hfill \textit{<< edu.date_range >>}
+l.11 ..."" ]] \hfill \textit{[[ edu.date_range ]]}
                                                   
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -628,7 +608,7 @@ you left one out. Proceed, with fingers crossed.
 ./sections/education.tex:11: Extra }, or forgotten $.
 <recently read> \egroup 
                         
-l.11 ..."" >> \hfill \textit{<< edu.date_range >>}
+l.11 ..."" ]] \hfill \textit{[[ edu.date_range ]]}
                                                   
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -707,7 +687,7 @@ LaTeX Font Warning: Font shape `OT1/lmr/m/scit' undefined
 ./sections/projects.tex:12: Missing $ inserted.
 <inserted text> 
                 $
-l.12 ...xtbar \  \textit{<< project.tech_stack >>}
+l.12 ...xtbar \  \textit{[[ project.tech_stack ]]}
                                                   
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -715,89 +695,13 @@ you left one out. Proceed, with fingers crossed.
 ./sections/projects.tex:12: Extra }, or forgotten $.
 <recently read> \egroup 
                         
-l.12 ...xtbar \  \textit{<< project.tech_stack >>}
+l.12 ...xtbar \  \textit{[[ project.tech_stack ]]}
                                                   
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
 you forgot something else, as in `\hbox{$x}'. In such cases
 the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
-
-./sections/projects.tex:13: Missing $ inserted.
-<inserted text> 
-                $
-l.13 ...ct.link_url >>}{<< project.link_label >>}}
-                                                  << endif >>
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-./sections/projects.tex:13: Missing $ inserted.
-<inserted text> 
-                $
-l.13 ...ct.link_url >>}{<< project.link_label >>}}
-                                                  << endif >>
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-./sections/projects.tex:13: Missing $ inserted.
-<inserted text> 
-                $
-l.13 ...ct.link_url >>}{<< project.link_label >>}}
-                                                  << endif >>
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-./sections/projects.tex:13: Missing $ inserted.
-<inserted text> 
-                $
-l.13 ...ct.link_url >>}{<< project.link_label >>}}
-                                                  << endif >>
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-./sections/projects.tex:13: Missing $ inserted.
-<inserted text> 
-                $
-l.13 ...ct.link_url >>}{<< project.link_label >>}}
-                                                  << endif >>
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-./sections/projects.tex:13: Missing $ inserted.
-<inserted text> 
-                $
-l.13 ...ct.link_url >>}{<< project.link_label >>}}
-                                                  << endif >>
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-./sections/projects.tex:13: Missing $ inserted.
-<inserted text> 
-                $
-l.13 ...ct.link_url >>}{<< project.link_label >>}}
-                                                  << endif >>
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-./sections/projects.tex:13: Missing $ inserted.
-<inserted text> 
-                $
-l.13 ...ct.link_url >>}{<< project.link_label >>}}
-                                                  << endif >>
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
 
 ./sections/projects.tex:14: Missing $ inserted.
 <inserted text> 
@@ -807,95 +711,24 @@ l.14
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-
-Overfull \hbox (18.14824pt too wide) in paragraph at lines 11--14
-[]\OT1/lmr/m/it/10 << for project in projects >>   \OT1/lmr/bx/it/10 << project.name >> \OMS/lmsy/m/n/10 j \OT1/lmr/m/it/10 << project.tech$[]\OML/lmm/m/it/10 tack >><< ifproject:link[]rl >>  [] <<
- []
-
 ) (./sections/skills.tex
 
 LaTeX Font Warning: Font shape `OT1/lmr/m/scit' undefined
 (Font)              using `OT1/lmr/m/scsl' instead on input line 6.
 
-./sections/skills.tex:8: Missing $ inserted.
-<inserted text> 
-                $
-l.8 << for skill_
-                 group in skills >>
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-./sections/skills.tex:9: Missing $ inserted.
-<inserted text> 
-                $
-l.9     \begin{onecolentry}
-                           
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-./sections/skills.tex:9: Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.9     \begin{onecolentry}
-                           
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-./sections/skills.tex:9: Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.9     \begin{onecolentry}
-                           
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-./sections/skills.tex:9: Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.9     \begin{onecolentry}
-                           
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-
-./sections/skills.tex:9: LaTeX Error: Lonely \item--perhaps a missing list environment.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.9     \begin{onecolentry}
-                           
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-Underfull \hbox (badness 10000) detected at line 9
-[][]
- []
-
 ./sections/skills.tex:10: Missing $ inserted.
 <inserted text> 
                 $
-l.10         \textbf{<< skill_group.category >>:}
-                                                  << skill_group.items >>
+l.10         \textbf{[[ skill_group.category ]]:}
+                                                  [[ skill_group.items ]]
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
 ./sections/skills.tex:10: Extra }, or forgotten $.
 <recently read> \egroup 
                         
-l.10         \textbf{<< skill_group.category >>:}
-                                                  << skill_group.items >>
+l.10         \textbf{[[ skill_group.category ]]:}
+                                                  [[ skill_group.items ]]
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
 you forgot something else, as in `\hbox{$x}'. In such cases
@@ -903,7 +736,7 @@ the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
 
-./sections/skills.tex:11: LaTeX Error: Command \end{document} invalid in math mode.
+./sections/skills.tex:11: LaTeX Error: Command \end{list} invalid in math mode.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
@@ -922,19 +755,6 @@ l.11     \end{onecolentry}
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-
-./sections/skills.tex:11: LaTeX Error: \begin{document} ended by \end{list}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.11     \end{onecolentry}
-                          
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
 ./sections/skills.tex:11: Missing } inserted.
 <inserted text> 
                 }
@@ -945,137 +765,41 @@ I've inserted something that you may have forgotten.
 With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
-
-./sections/skills.tex:11: Missing } inserted.
-<inserted text> 
-                }
-l.11     \end{onecolentry}
-                          
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-./sections/skills.tex:11: Missing } inserted.
-<inserted text> 
-                }
-l.11     \end{onecolentry}
-                          
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-./sections/skills.tex:11: Extra \endgroup.
-<recently read> \endgroup 
-                          
-l.11     \end{onecolentry}
-                          
-Things are pretty mixed up, but I think the worst is over.
-
-
-./sections/skills.tex:11: LaTeX Error: \begin{document} ended by \end{adjustwidth}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.11     \end{onecolentry}
-                          
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-./sections/skills.tex:11: Extra \endgroup.
-\end  ...end#1\endcsname \@checkend {#1}\endgroup 
-                                                  \UseHook {env/#1/after}\if...
-l.11     \end{onecolentry}
-                          
-Things are pretty mixed up, but I think the worst is over.
-
-
-./sections/skills.tex:11: LaTeX Error: \begin{document} ended by \end{onecolentry}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.11     \end{onecolentry}
-                          
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-./sections/skills.tex:11: Extra \endgroup.
-\end  ...end#1\endcsname \@checkend {#1}\endgroup 
-                                                  \UseHook {env/#1/after}\if...
-l.11     \end{onecolentry}
-                          
-Things are pretty mixed up, but I think the worst is over.
 
 ) (./sections/certificates.tex
-./sections/certificates.tex:20: Missing $ inserted.
+
+LaTeX Font Warning: Font shape `OT1/lmr/m/scit' undefined
+(Font)              using `OT1/lmr/m/scsl' instead on input line 9.
+
+)
+Runaway argument?
+{ \par \textit {[[ cert.date ]]}\\ [\textbf {[[ cert.issuer ]]} \par \ETC.
+/Users/frankshan/Desktop/Job Application/workspace/templates/resume/main.tex:181: File ended while scanning use of \\twocolentry.
 <inserted text> 
-                $
-l.20     \end{twocolentry}
-                          
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
+                \par 
+l.181     \input{sections/certificates}
+                                       
+I suspect you have forgotten a `}', causing me
+to read past where you wanted me to stop.
+I'll try to recover; but if the error is serious,
+you'd better type `E' or `X' now and fix your file.
 
-./sections/certificates.tex:20: Missing $ inserted.
-<inserted text> 
-                $
-l.20     \end{twocolentry}
-                          
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
 
-./sections/certificates.tex:20: Missing $ inserted.
-<inserted text> 
-                $
-l.20     \end{twocolentry}
-                          
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
+/Users/frankshan/Desktop/Job Application/workspace/templates/resume/main.tex:184: LaTeX Error: \begin{twocolentry} on input line 12 ended by \end{document}.
 
-./sections/certificates.tex:20: Missing $ inserted.
-<inserted text> 
-                $
-l.20     \end{twocolentry}
-                          
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.184 \end{document}
+                    
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
 
-./sections/certificates.tex:20: Missing } inserted.
-<inserted text> 
-                }
-l.20     \end{twocolentry}
-                          
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
+[1
 
-./sections/certificates.tex:20: Extra }, or forgotten \endgroup.
-\par ...m \@noitemerr {\@@par }\fi \else {\@@par }
-                                                  \fi 
-l.20     \end{twocolentry}
-                          
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-) [1
-
-{/usr/local/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/fontawesome5/fa5free1.enc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/fontawesome5/fa5free2.enc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/fontawesome5/fa5brands0.enc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-rmsc.enc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}] 
+{/usr/local/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/fontawesome5/fa5free1.enc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/fontawesome5/fa5free2.enc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/fontawesome5/fa5brands0.enc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-rmsc.enc}{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}] 
 enddocument/afterlastpage (AED): lastpage setting LastPage.
 (./main.aux)
  ***********
@@ -1089,20 +813,26 @@ LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
 Package lastpage Warning: Rerun to get the references right on input line 184.
 
- ) 
+ )
+(\end occurred inside a group at level 3)
+
+### semi simple group (level 3) entered at line 12 (\begingroup)
+### simple group (level 2) entered at line 12 ({)
+### simple group (level 1) entered at line 11 ({)
+### bottom level 
 Here is how much of TeX's memory you used:
- 15366 strings out of 467525
- 262540 string characters out of 5418982
- 686401 words of memory out of 5000000
- 44042 multiletter control sequences out of 15000+600000
- 693818 words of font info for 76 fonts, out of 8000000 for 9000
+ 15321 strings out of 467525
+ 261528 string characters out of 5418982
+ 681410 words of memory out of 5000000
+ 44007 multiletter control sequences out of 15000+600000
+ 677847 words of font info for 71 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,7n,84p,444b,616s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2026/texmf-dist/fonts/type1/public/fontawesome5/FontAwesome5Brands-Regular.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/fontawesome5/FontAwesome5Free-Regular.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/fontawesome5/FontAwesome5Free-Solid.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmcsco10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmsy10.pfb>
-Output written on main.pdf (1 page, 220115 bytes).
+ 75i,5n,84p,444b,677s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2026/texmf-dist/fonts/type1/public/fontawesome5/FontAwesome5Brands-Regular.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/fontawesome5/FontAwesome5Free-Regular.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/fontawesome5/FontAwesome5Free-Solid.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmcsco10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmr17.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmsy10.pfb>
+Output written on main.pdf (1 page, 215728 bytes).
 PDF statistics:
- 130 PDF objects out of 1000 (max. 8388607)
- 93 compressed objects within 1 object stream
+ 126 PDF objects out of 1000 (max. 8388607)
+ 91 compressed objects within 1 object stream
  7 named destinations out of 1000 (max. 500000)
  41 words of extra memory for PDF output out of 10000 (max. 10000000)
 

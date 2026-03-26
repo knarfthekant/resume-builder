@@ -8,24 +8,24 @@
 %%     .highlights   - list of strings: bullet points
 \section{Experience}
 
-<< for i, job in enumerate(experience) >>
+[% for i, job in enumerate(experience) %]
     \begin{twocolentry}{
 
-    \textit{<< job.date_range >>}}
-        \textbf{<< job.title >>} \textbar\ \textit{<< job.location >>}
+    \textit{[[ job.date_range ]]}}
+        \textbf{[[ job.title ]]} \textbar\ \textit{[[ job.location ]]}
         
-        \textit{<< job.company >>}
+        \textit{[[ job.company ]]}
     \end{twocolentry}
 
     \vspace{0.10 cm}
     \begin{onecolentry}
         \begin{highlights}
     
-    << for bullet in job.highlights >>
-    \item << bullet >>
-    << endfor >>
+    [% for bullet in job.highlights %]
+    \item [[ bullet ]]
+    [% endfor %]
         
         \end{highlights}
     \end{onecolentry}
-<< if not loop.last >>\vspace{0.2cm}<< endif >>
-<< endfor >>
+[% if not loop.last %]\vspace{0.2cm}[% endif %]
+[% endfor %]

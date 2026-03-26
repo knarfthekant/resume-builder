@@ -149,9 +149,6 @@ INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/lm/ot1lmr.fd
 INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/lm/ot1lmr.fd
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/map/fontname/texfonts.map
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/public/lm/rm-lmr10.tfm
-INPUT ./main.aux
-INPUT ./main.aux
-INPUT main.aux
 OUTPUT main.aux
 INPUT /usr/local/texlive/2026/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 INPUT /usr/local/texlive/2026/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
@@ -207,10 +204,6 @@ INPUT ./sections/highlights.tex
 INPUT ./sections/highlights.tex
 INPUT sections/highlights.tex
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/public/lm/rm-lmcsc10.tfm
-INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/lm/ts1lmr.fd
-INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/lm/ts1lmr.fd
-INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/lm/ts1lmr.fd
-INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/public/lm/ts1-lmr10.tfm
 INPUT ./sections/education.tex
 INPUT ./sections/education.tex
 INPUT ./sections/education.tex
@@ -233,9 +226,6 @@ INPUT ./sections/projects.tex
 INPUT ./sections/projects.tex
 INPUT ./sections/projects.tex
 INPUT sections/projects.tex
-INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/public/lm/rm-lmri8.tfm
-INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/public/lm/rm-lmri7.tfm
-INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/public/lm/rm-lmri7.tfm
 INPUT ./sections/skills.tex
 INPUT ./sections/skills.tex
 INPUT ./sections/skills.tex
@@ -246,7 +236,6 @@ INPUT ./sections/certificates.tex
 INPUT ./sections/certificates.tex
 INPUT ./sections/certificates.tex
 INPUT sections/certificates.tex
-INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/public/lm/rm-lmr8.tfm
 INPUT /usr/local/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc
@@ -254,7 +243,6 @@ INPUT /usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/fontawesome5/fa5free1.e
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/fontawesome5/fa5free2.enc
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/fontawesome5/fa5brands0.enc
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-rmsc.enc
-INPUT /usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc
 INPUT main.aux
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/type1/public/fontawesome5/FontAwesome5Brands-Regular.pfb
@@ -269,5 +257,6 @@ INPUT /usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmmi10.pfb
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmmi12.pfb
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmmi7.pfb
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmr10.pfb
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmr17.pfb
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmri10.pfb
 INPUT /usr/local/texlive/2026/texmf-dist/fonts/type1/public/lm/lmsy10.pfb

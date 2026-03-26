@@ -8,14 +8,12 @@
 %%     .name         - string: certificate/course name
 \section{Professional Certificates}
 
-[% for cert in certificates %]
     \begin{twocolentry}{
     
-    \textit{[[ cert.date ]]}\\
-    [% if cert.cert_url %]\mbox{\href{[[ cert.cert_url ]]}{[[ cert.cert_label ]]}}[% endif %]}
-        \textbf{[[ cert.issuer ]]}
+    \textit{December 2025}\\
+\mbox{\href{https://example.com/certificates/xcs224n}{credential}}}
+        \textbf{Stanford Online}
         
-        \textit{[[ cert.name ]]}
+        \textit{XCS224N Natural Language Understanding}
     
     \end{twocolentry}
-[% endfor %]

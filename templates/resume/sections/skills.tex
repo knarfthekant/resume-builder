@@ -5,11 +5,11 @@
 %%     .items     - string: comma-separated list of skills
 \section{Skills}
 
-<< for skill_group in skills >>
+[% for skill_group in skills %]
     \begin{onecolentry}
-        \textbf{<< skill_group.category >>:} << skill_group.items >>
+        \textbf{[[ skill_group.category ]]:} [[ skill_group.items ]]
     \end{onecolentry}
 
     \vspace{0.05 cm}
 
-<< endfor >>
+[% endfor %]

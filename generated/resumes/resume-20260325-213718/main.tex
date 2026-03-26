@@ -39,8 +39,8 @@
 \usepackage{fontawesome5}
 \usepackage{amsmath}
 \usepackage[
-    pdftitle={[[ candidate_name ]]'s Resume},
-    pdfauthor={[[ candidate_name ]]},
+    pdftitle={Frank Shan's Resume},
+    pdfauthor={Frank Shan},
     pdfcreator={LaTeX},
     colorlinks=true,
     urlcolor=primaryColor
@@ -137,37 +137,33 @@
 
     % ── Header ────────────────────────────────────────────────
     \begin{header}
-        \textbf{\fontsize{24 pt}{24 pt}\selectfont [[ candidate_name ]]}
+        \textbf{\fontsize{24 pt}{24 pt}\selectfont Frank Shan}
 
         \normalsize
-        \mbox{\hrefWithoutArrow{mailto:[[ email ]]}{\color{black}{\footnotesize\faEnvelope[regular]}\hspace*{0.13cm}[[ email ]]}}%
+        \mbox{\hrefWithoutArrow{mailto:g3shan@uwaterloo.ca}{\color{black}{\footnotesize\faEnvelope[regular]}\hspace*{0.13cm}g3shan@uwaterloo.ca}}%
         \kern 0.25 cm%
         \AND%
         \kern 0.25 cm%
-        \mbox{\hrefWithoutArrow{tel:[[ phone ]]}{\color{black}{\footnotesize\faPhone*}\hspace*{0.13cm}[[ phone ]]}}%
+        \mbox{\hrefWithoutArrow{tel:+1-263-881-6666}{\color{black}{\footnotesize\faPhone*}\hspace*{0.13cm}+1-263-881-6666}}%
         \kern 0.25 cm%
         \AND%
         \kern 0.25 cm%
-        \mbox{\hrefWithoutArrow{[[ linkedin_url ]]}{\color{black}{\footnotesize\faLinkedinIn}\hspace*{0.13cm}[[ linkedin_handle ]]}}%
+        \mbox{\hrefWithoutArrow{https://linkedin.com/in/frank-shan}{\color{black}{\footnotesize\faLinkedinIn}\hspace*{0.13cm}frank-shan}}%
         \kern 0.25 cm%
         \AND%
         \kern 0.25 cm%
-        \mbox{\hrefWithoutArrow{[[ github_url ]]}{\color{black}{\footnotesize\faGithub}\hspace*{0.13cm}[[ github_handle ]]}}%
-        [% if portfolio_url %]
+        \mbox{\hrefWithoutArrow{https://github.com/knarfthekant}{\color{black}{\footnotesize\faGithub}\hspace*{0.13cm}knarfthekant}}%
         \kern 0.25 cm%
         \AND%
         \kern 0.25 cm%
-        \mbox{\hrefWithoutArrow{[[ portfolio_url ]]}{\color{black}{\footnotesize\faGlobe}\hspace*{0.13cm}[[ portfolio_label ]]}}%
-        [% endif %]
+        \mbox{\hrefWithoutArrow{https://frank-shan.vercel.app}{\color{black}{\footnotesize\faGlobe}\hspace*{0.13cm}portfolio}}%
         \kern 0.25 cm%
     \end{header}
 
     \vspace{0.2 cm - 0.2 cm}
 
     % ── Sections ──────────────────────────────────────────────
-    [% if highlights is defined and highlights.summary %]
     \input{sections/highlights}
-    [% endif %]
 
     \input{sections/education}
 
@@ -177,8 +173,6 @@
 
     \input{sections/skills}
 
-    [% if certificates is defined and certificates|length > 0 %]
     \input{sections/certificates}
-    [% endif %]
 
 \end{document}

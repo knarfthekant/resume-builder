@@ -11,5 +11,5 @@ python3 -m pip install -e .
 Run the CLI:
 ```bash
 resume-builder generate
-resume-builder tui
+resume-builder cli
 ```
