@@ -36,6 +36,7 @@ ANSI_MUTED = "\x1b[38;5;245m"
 ANSI_NOTICE = "\x1b[38;5;114m"
 ANSI_SELECTED = "\x1b[1;38;5;16;48;5;117m"
 ANSI_MESSAGE = "\x1b[38;5;223m"
+ANSI_CREDIT = "\x1b[38;5;244m"
 TITLE_ART = [
 "██████╗░███████╗░██████╗██╗░░░██╗███╗░░░███╗███████╗  ██████╗░██╗░░░██╗██╗██╗░░░░░██████╗░███████╗██████╗░",
 "██╔══██╗██╔════╝██╔════╝██║░░░██║████╗░████║██╔════╝  ██╔══██╗██║░░░██║██║██║░░░░░██╔══██╗██╔════╝██╔══██╗",
@@ -44,7 +45,7 @@ TITLE_ART = [
 "██║░░██║███████╗██████╔╝╚██████╔╝██║░╚═╝░██║███████╗  ██████╦╝╚██████╔╝██║███████╗██████╔╝███████╗██║░░██║",
 "╚═╝░░╚═╝╚══════╝╚═════╝░░╚═════╝░╚═╝░░░░░╚═╝╚══════╝  ╚═════╝░░╚═════╝░╚═╝╚══════╝╚═════╝░╚══════╝╚═╝░░╚═╝",
 ]
-TITLE_RULE = "─" * 90
+TITLE_RULE_LINE = "── v0.0.1 " + "─" * 79 + " by Frank Shan ──"
 
 
 class ResumeBuilderCLI:
@@ -142,7 +143,7 @@ class ResumeBuilderCLI:
         )
 
     def render_text(self) -> str:
-        header = [*TITLE_ART, TITLE_RULE, ""]
+        header = [*TITLE_ART, TITLE_RULE_LINE, ""]
         if self.mode == "menu":
             return "\n".join(header + self._render_menu_lines())
         if self.mode == "choice":
@@ -156,7 +157,10 @@ class ResumeBuilderCLI:
     def render_ansi(self) -> str:
         styled_lines: list[str] = []
         for line in self.render_text().splitlines():
-            if line in TITLE_ART or line in {TITLE_RULE}:
+            if line == TITLE_RULE_LINE:
+                styled_lines.append(f"{ANSI_TITLE}{TITLE_RULE_LINE}{ANSI_RESET}")
+                continue
+            if line in TITLE_ART:
                 styled_lines.append(f"{ANSI_TITLE}{line}{ANSI_RESET}")
                 continue
             if line.startswith("┌") or line.startswith("└"):
