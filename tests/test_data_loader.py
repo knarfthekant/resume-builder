@@ -14,15 +14,15 @@ class DataLoaderTests(unittest.TestCase):
         profile = load_resume_profile(PROJECT_ROOT / "data" / "profiles" / "general.yaml")
         self.assertEqual(profile.candidate_name, "Frank Shan")
         self.assertEqual(profile.min_experience_entries, 1)
-        self.assertEqual(profile.max_project_entries, 3)
+        self.assertEqual(profile.max_project_entries, 4)
         self.assertGreaterEqual(len(profile.experience_entries), 1)
         self.assertGreaterEqual(len(profile.project_entries), 1)
 
     def test_load_bullet_library(self) -> None:
         library = load_bullet_library(PROJECT_ROOT / "data" / "bullets" / "general.yaml")
-        self.assertIn("ziyutec_marketplace", library.experience)
+        self.assertIn("ziyutec", library.experience)
         self.assertTrue(any(option.id == "ai_automation" for option in library.summary_options))
-        self.assertFalse(hasattr(library.experience["ziyutec_marketplace"][0], "evidence"))
+        self.assertFalse(hasattr(library.experience["ziyutec"][0], "evidence"))
 
     def test_invalid_profile_raises(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:

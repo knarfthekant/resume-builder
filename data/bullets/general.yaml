@@ -2,95 +2,179 @@ summary_options:
   - id: general_fullstack
     text: >
       \textbf{Full-stack} developer specialized in translating \textbf{business requirements into production-ready}
-      systems. Shipped customer-facing software quickly and reliably across backend, automation, and AI-assisted workflows.
+      systems. Shipped customer-facing software across backend, cloud infrastructure, and AI-assisted workflows with strong ownership.
     tags: [full-stack, product, execution]
+
   - id: ai_automation
     text: >
-      Engineer focused on \textbf{AI automation}, retrieval systems, and developer tooling. Builds practical products that
-      connect LLM workflows with reliable backend systems and measurable delivery outcomes.
+      Engineer focused on \textbf{AI systems and automation}, building retrieval, agentic workflows, and developer tooling that integrate LLMs with reliable backend infrastructure and measurable outcomes.
     tags: [ai, automation, backend]
+
   - id: backend_platform
     text: >
-      Backend-leaning builder experienced in \textbf{distributed application design}, data modeling, and systems that balance
-      correctness, speed, and maintainability in startup and research environments.
+      Backend-leaning builder experienced in \textbf{distributed system design}, data modeling, and performance optimization, with a focus on correctness, scalability, and maintainability.
     tags: [backend, systems, architecture]
+
 
 experience:
   ziyutec:
     - id: ziyutec_sdlc
       text: >
-        \textbf{Owned} the end-to-end planning and development of a \hrefWithoutArrow{https://neshub.net}{global B2B marketplace}
-        for a startup initiative, \textbf{leading} system design, implementation, and deployment (AWS) across the \textbf{entire SDLC}.
-      tags: [product, architecture, aws]
+        \textbf{Owned} end-to-end architecture and delivery of a \hrefWithoutArrow{https://neshub.net}{global B2B marketplace}, leading
+        system design, backend/frontend implementation, and AWS deployment across the \textbf{entire SDLC} in a 3-engineer team.
+      tags: [product, architecture, aws, ownership]
+
+    - id: ziyutec_system_design
+      text: >
+        Designed a modular \textbf{service-oriented architecture} (NestJS + PostgreSQL + Redis), enabling independent feature evolution,
+        fault isolation, and scalable backend growth.
+      tags: [backend, architecture, systems]
+
     - id: ziyutec_rbac
       text: >
-        Architected a Role-Based Access Control framework (NestJS, PostgreSQL) to support extensible user roles; balanced database
-        \textbf{normalization} against \textbf{query performance} via denormalization and data \textbf{integrity} checks.
+        Architected a flexible \textbf{RBAC authorization system} supporting hierarchical roles and organization-level permissions,
+        balancing \textbf{normalization} with \textbf{query efficiency} via selective denormalization.
       tags: [backend, authorization, database]
+
+    - id: ziyutec_transactions
+      text: >
+        Enforced \textbf{ACID-safe transactional workflows} for multi-step operations (e.g., onboarding, verification), improving data
+        consistency and eliminating partial-write edge cases.
+      tags: [backend, database, transactions]
+
     - id: ziyutec_caching
       text: >
-        Engineered a \textbf{caching} layer to decouple client-side state from \textbf{atomic} database transactions, reducing
-        \textbf{user friction} while ensuring transactional integrity.
-      tags: [backend, transactions, performance]
+        Engineered a \textbf{caching and state synchronization layer} (Redis) to decouple frontend interactions from
+        \textbf{atomic database transactions}, improving responsiveness while preserving consistency guarantees.
+      tags: [backend, caching, performance]
+
+    - id: ziyutec_search
+      text: >
+        Built a \textbf{semantic search system} (OpenSearch) with hybrid lexical + vector retrieval and ranking, enabling
+        automated resource discovery and recommendation workflows.
+      tags: [search, backend, ai]
+
+    - id: ziyutec_file_pipeline
+      text: >
+        Designed a secure \textbf{file upload pipeline} using S3 presigned URLs, reducing backend load and enabling scalable,
+        direct-to-storage uploads for large assets.
+      tags: [aws, backend, storage]
+
     - id: ziyutec_workflow_agent
       text: >
-        Built an automation agent for engineering workflow, reducing operational workload by \textbf{20\%} across a \textbf{50-person}
-        engineering team.
+        Developed an internal \textbf{workflow automation agent} integrating database queries and backend tools, reducing
+        manual operational workload by \textbf{20\%} across a \textbf{50-person} team.
       tags: [automation, ai, productivity]
+
     - id: ziyutec_rag
       text: >
-        Built a \textbf{RAG agent}, indexing \textbf{500+ enterprise documents} of different format; improved \textbf{contextual relevance
-        by 16\%} (DeepEval) via \textbf{hybrid search and reranking} on synthetically generated evaluation set.
+        Built a \textbf{RAG system} indexing \textbf{1,000+ enterprise documents}, improving retrieval \textbf{faithfulness and
+        contextual relevance by 16\%} (DeepEval) via hybrid search, reranking, and context-aware chunking.
       tags: [rag, search, evaluation]
+
+    - id: ziyutec_auth
+      text: >
+        Implemented \textbf{JWT-based authentication with refresh token rotation}, resolving session persistence issues and improving
+        reliability of long-running user workflows.
+      tags: [backend, auth, security]
+
     - id: ziyutec_legacy
       text: >
-        Maintained and enhanced a \textbf{multi-tenant} ERP platform comprising \textbf{60K+ lines of legacy code}, supporting
-        \textbf{1,000+ active projects}. Resolved a \textbf{long-standing} session management defect by implementing
-        \textbf{JWT refresh token rotation}, eliminating form data loss.
-      tags: [legacy, reliability, auth]
+        Maintained and extended a \textbf{multi-tenant ERP system} (60K+ LOC) supporting \textbf{1,000+ active projects}, improving
+        stability and debugging efficiency in a legacy codebase.
+      tags: [legacy, reliability, systems]
+
+
   uw_research:
     - id: research_neurosymbolic
       text: >
-        Designed comparative experiments for a probabilistic programming language PAL that compiles structural rules into tensor operations.
-        Built a \textbf{hybrid neuro-symbolic} framework for training Named Entity Recognition models to enforce strict linguistic
-        constraints and improve early-epoch model convergence.
+        Designed experiments for a probabilistic programming system (PAL) compiling symbolic constraints into tensor operations,
+        enabling \textbf{neuro-symbolic training} with strict structural guarantees.
       tags: [research, ml, neurosymbolic]
+
+    - id: research_ner_constraints
+      text: >
+        Built a hybrid NER pipeline combining frozen language model embeddings with constraint-based decoding,
+        improving \textbf{prediction validity} and early-stage training stability.
+      tags: [ml, nlp, research]
+
     - id: research_experiments
       text: >
-        Structured reproducible experiments and analysis pipelines for model comparisons, enabling faster iteration on constraint-driven
-        NER training strategies.
+        Developed reproducible experiment pipelines with controlled datasets and evaluation metrics, accelerating iteration on
+        constraint-driven learning approaches.
       tags: [research, experimentation, reproducibility]
+
 
 projects:
   mini_vlm:
     - id: vlm_model
       text: >
-        Built a LLaVA style \textbf{Vision-Language Model}, fusing a \textbf{SigLIP-2} vision encoder with \textbf{Qwen3-0.6B} via a pixel-shuffle modality projector; achieved \textbf{32.9\% zero-shot accuracy on MMStar}.
-      tags: [python, pytorch, pretrain, nlp]
+        Built a LLaVA-style \textbf{Vision-Language Model}, integrating \textbf{SigLIP-2} with \textbf{Qwen3-0.6B} via a modality projector,
+        achieving \textbf{32.9\% zero-shot MMStar accuracy} under a \textbf{1B parameter} constraint.
+      tags: [python, pytorch, multimodal, ml]
+
     - id: vlm_training_pipeline
       text: >
-        Designed a high-throughput training pipeline with a \textbf{greedy knapsack} batching strategy to maximize token-level GPU utilization, enabling efficient multimodal pretraining at \textbf{consumer-scale hardware}.
-      tags: [python, data pipeline, pretrain]
+        Designed a high-throughput multimodal training pipeline with \textbf{dynamic batching} and token-aware scheduling,
+        maximizing GPU utilization on \textbf{16GB VRAM hardware}.
+      tags: [python, systems, ml]
+
+    - id: vlm_efficiency
+      text: >
+        Optimized training stability and memory usage via gradient checkpointing, mixed precision, and custom dataset pipelines,
+        enabling efficient training on consumer GPUs.
+      tags: [ml, optimization, systems]
+
+
   mini_vllm:
     - id: vllm_engine
       text: >
-         Built a LLM \textbf{inference engine from scratch}, featuring continuous batching, scheduler-driven execution, and pluggable dense/paged KV-cache backends, with \textbf{prefix caching} for efficient memory reuse.
-      tags: [python, inference, llm]
+        Built a lightweight \textbf{LLM inference engine} with continuous batching, request scheduling, and pluggable
+        \textbf{paged KV-cache} architecture for efficient memory management.
+      tags: [python, inference, systems]
+
+    - id: vllm_scheduler
+      text: >
+        Implemented a custom \textbf{scheduler and block manager} to coordinate sequence execution and KV memory allocation,
+        improving GPU utilization under concurrent workloads.
+      tags: [systems, gpu, inference]
+
     - id: vllm_benchmarking
       text: >
-        Designed a ShareGPT-based \textbf{benchmarking} pipeline and demonstrated up to \textbf{59\% higher request throughput} and significantly lower TTFT with paged attention.
-      tags: [python, inference, llm]
+        Developed a ShareGPT-based benchmarking suite, achieving up to \textbf{59\% higher throughput} and reduced
+        time-to-first-token (TTFT) with paged attention.
+      tags: [benchmarking, systems, llm]
+
+
   goodline_inventory:
     - id: inventory_system
       text: >
-        Built a \textbf{full-stack inventory management system} for a local business, featuring \textbf{real-time stock tracking}, \textbf{order management}, and \textbf{user authentication}.
-      tags: [python, nextjs, postgresql, tailwindcss]
+        Built a \textbf{full-stack inventory system} with real-time stock tracking, order flows, and authentication,
+        serving as a single source of truth for inventory operations.
+      tags: [fullstack, database, systems]
+
+    - id: inventory_modeling
+      text: >
+        Designed relational schemas supporting per-unit tracking (serial numbers) and inbound/outbound linkage,
+        ensuring traceability and data integrity.
+      tags: [database, design]
+
+
   resume_builder:
     - id: resume_builder_agent
       text: >
-        Engineered a multi-step resume optimization agent using LangGraph, leveraging stateful workflows to autonomously map professional experience to job descriptions.
+        Built a \textbf{multi-step resume generation agent} (LangGraph) that maps experience to job descriptions via
+        structured reasoning and template-driven generation.
       tags: [python, langgraph, llm]
+
     - id: resume_builder_hitl
       text: >
-        Implemented an iterative Human-in-the-Loop (HITL) feedback system, enabling real-time refinement of LLM-generated resume content based on user-provided constraints.
-      tags: [python, langgraph, llm]
+        Implemented a \textbf{human-in-the-loop refinement loop}, enabling iterative constraint-based editing of generated
+        resumes with real-time feedback.
+      tags: [llm, systems]
+
+    - id: resume_builder_rendering
+      text: >
+        Integrated \textbf{LaTeX templating (Jinja2)} and automated compilation pipelines to generate consistent,
+        production-ready PDF resumes.
+      tags: [automation, tooling]

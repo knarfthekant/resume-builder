@@ -18,13 +18,11 @@ education:
     gpa: "CGPA: 92.3/100"
 skills:
   - category: Programming Languages
-    items: Python, TypeScript, SQL, Java, C++
-  - category: AI and ML
-    items: LangGraph, RAG evaluation, DeepEval, hybrid retrieval, probabilistic modeling
+    items: Python, TypeScript, JavaScript, C++, SQL, HTML, CSS
   - category: Frameworks
-    items: Jinja2, prompt\_toolkit, NestJS, React
-  - category: Platforms
-    items: AWS, PostgreSQL, LaTeX, Linux
+    items: NestJS, Next.js, React, Express, FastAPI, LangGraph, PyTorch
+  - category: Tools
+    items: AWS, PostgreSQL, Linux, Docker, Git
 certificates:
   - date: December 2025
     issuer: Stanford Online
@@ -44,7 +42,7 @@ experience_entries:
     location: Waterloo, ON
     date_range: Feb 2026 -- Present
     company: University of Waterloo
-    min_bullets: 1
+    min_bullets: 2
     max_bullets: 2
 project_entries:
   - id: mini_vlm
@@ -52,21 +50,21 @@ project_entries:
     tech_stack: Python, PyTorch, SigLIP-2, Qwen3-0.6B
     link_url: https://github.com/knarfthekant/mini_vlm
     link_label: github
-    min_bullets: 1
+    min_bullets: 2
     max_bullets: 2
   - id: mini_vllm
     name: Mini VLLM
     tech_stack: Python, PyTorch
     link_url: https://github.com/knarfthekant/mini_vllm
     link_label: github
-    min_bullets: 1
+    min_bullets: 2
     max_bullets: 2
   - id: goodline_inventory
     name: Goodline Inventory
     tech_stack: Python, Next.js, PostgreSQL
     link_url: https://github.com/knarfthekant/goodline_inventory
     link_label: github
-    min_bullets: 1
+    min_bullets: 2
     max_bullets: 2
   - id: resume_builder
     name: Resume Builder

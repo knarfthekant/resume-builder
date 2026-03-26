@@ -1,0 +1,178 @@
+% !TEX root = main.tex
+%% ============================================================
+%% RESUME MAIN TEMPLATE
+%% ============================================================
+%% Jinja2 template — rendered by the auto resume generation pipeline.
+%%
+%% TOP-LEVEL VARIABLES:
+%%   candidate_name    - string  : full name, e.g. "Frank Shan"
+%%   email             - string  : e.g. "g3shan@uwaterloo.ca"
+%%   phone             - string  : e.g. "+1-263-881-6666"
+%%   linkedin_url      - string  : full URL
+%%   linkedin_handle   - string  : display text, e.g. "frank-shan"
+%%   github_url        - string  : full URL
+%%   github_handle     - string  : display text, e.g. "knarfthekant"
+%%   portfolio_url     - string (optional)
+%%   portfolio_label   - string (optional) : e.g. "portfolio"
+%%
+%% See each sections/*.tex file for section-level variables.
+%% ============================================================
+
+\documentclass[10pt, letterpaper]{article}
+
+% Packages:
+\usepackage[
+    ignoreheadfoot,
+    top=1.25 cm,
+    bottom=1.25 cm,
+    left=1.5 cm,
+    right=1.5 cm,
+    footskip=1.0 cm,
+    % showframe % for debugging
+]{geometry}
+\usepackage{titlesec}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage[dvipsnames]{xcolor}
+\definecolor{primaryColor}{RGB}{0, 79, 144}
+\usepackage{enumitem}
+\usepackage{fontawesome5}
+\usepackage{amsmath}
+\usepackage[
+    pdftitle={Frank Shan's Resume},
+    pdfauthor={Frank Shan},
+    pdfcreator={LaTeX},
+    colorlinks=true,
+    urlcolor=primaryColor
+]{hyperref}
+\usepackage[pscoord]{eso-pic}
+\usepackage{calc}
+\usepackage{bookmark}
+\usepackage{lastpage}
+\usepackage{changepage}
+\usepackage{paracol}
+\usepackage{ifthen}
+\usepackage{needspace}
+\usepackage{iftex}
+
+% ATS parsability:
+\ifPDFTeX
+    \input{glyphtounicode}
+    \pdfgentounicode=1
+    \usepackage[utf8]{inputenc}
+    \usepackage{lmodern}
+\fi
+
+% ── Layout ────────────────────────────────────────────────────
+\AtBeginEnvironment{adjustwidth}{\partopsep0pt}
+\pagestyle{empty}
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\topskip}{0pt}
+\setlength{\columnsep}{0cm}
+
+\titleformat{\section}{\needspace{4\baselineskip}\large\scshape\raggedright}{}{0pt}{}
+[\vspace{1pt}\titlerule]
+
+\titlespacing{\section}{-1pt}{0.2 cm}{0.2 cm}
+
+\newenvironment{highlights}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=0.10 cm + 10pt
+    ]
+}{
+    \end{itemize}
+}
+
+\newenvironment{highlightsforbulletentries}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=10pt
+    ]
+}{
+    \end{itemize}
+}
+
+\newenvironment{onecolentry}{
+    \begin{adjustwidth}{0.2 cm + 0.00001 cm}{0.2 cm + 0.00001 cm}
+}{
+    \end{adjustwidth}
+}
+
+\newenvironment{twocolentry}[2][]{
+    \onecolentry
+    \def\secondColumn{#2}
+    \setcolumnwidth{\fill, 4.5 cm}
+    \begin{paracol}{2}
+}{
+    \switchcolumn \raggedleft \secondColumn
+    \end{paracol}
+    \endonecolentry
+}
+
+\newenvironment{header}{
+    \setlength{\topsep}{0pt}\par\kern\topsep\centering\linespread{1.5}
+}{
+    \par\kern\topsep
+}
+
+\let\hrefWithoutArrow\href
+\renewcommand{\href}[2]{\hrefWithoutArrow{#1}{\ifthenelse{\equal{#2}{}}{ }{#2 }\raisebox{.15ex}{\footnotesize \faExternalLink*}}}
+
+% ── Document ──────────────────────────────────────────────────
+\begin{document}
+    \newcommand{\AND}{\unskip
+        \cleaders\copy\ANDbox\hskip\wd\ANDbox
+        \ignorespaces
+    }
+    \newsavebox\ANDbox
+    \sbox\ANDbox{}
+
+    % ── Header ────────────────────────────────────────────────
+    \begin{header}
+        \textbf{\fontsize{24 pt}{24 pt}\selectfont Frank Shan}
+
+        \normalsize
+        \mbox{\hrefWithoutArrow{mailto:g3shan@uwaterloo.ca}{\color{black}{\footnotesize\faEnvelope[regular]}\hspace*{0.13cm}g3shan@uwaterloo.ca}}%
+        \kern 0.25 cm%
+        \AND%
+        \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{tel:+1-263-881-6666}{\color{black}{\footnotesize\faPhone*}\hspace*{0.13cm}+1-263-881-6666}}%
+        \kern 0.25 cm%
+        \AND%
+        \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{https://linkedin.com/in/frank-shan}{\color{black}{\footnotesize\faLinkedinIn}\hspace*{0.13cm}frank-shan}}%
+        \kern 0.25 cm%
+        \AND%
+        \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{https://github.com/knarfthekant}{\color{black}{\footnotesize\faGithub}\hspace*{0.13cm}knarfthekant}}%
+        \kern 0.25 cm%
+        \AND%
+        \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{https://frank-shan.vercel.app}{\color{black}{\footnotesize\faGlobe}\hspace*{0.13cm}portfolio}}%
+        \kern 0.25 cm%
+    \end{header}
+
+    \vspace{0.2 cm - 0.2 cm}
+
+    % ── Sections ──────────────────────────────────────────────
+    \input{sections/highlights}
+
+    \input{sections/education}
+
+    \input{sections/experience}
+
+    \input{sections/projects}
+
+    \input{sections/skills}
+
+    \input{sections/certificates}
+
+\end{document}

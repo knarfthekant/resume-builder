@@ -28,7 +28,13 @@ class SelectionTests(unittest.TestCase):
             self.service.validate_selection(
                 self.profile,
                 self.library,
-                ResumeSelection(experience={"ziyutec_marketplace": ["missing_bullet"]}),
+                ResumeSelection(
+                    experience={"ziyutec": ["missing_bullet", "ziyutec_rag", "ziyutec_rbac", "ziyutec_auth"]},
+                    projects={
+                        "resume_builder": ["resume_builder_agent", "resume_builder_hitl"],
+                        "mini_vllm": ["vllm_engine", "vllm_scheduler"],
+                    },
+                ),
             )
 
     def test_invalid_selection_raises_for_over_limit(self) -> None:
@@ -38,14 +44,20 @@ class SelectionTests(unittest.TestCase):
                 self.library,
                 ResumeSelection(
                     experience={
-                        "ziyutec_marketplace": [
+                        "ziyutec": [
                             "ziyutec_sdlc",
+                            "ziyutec_system_design",
                             "ziyutec_rbac",
+                            "ziyutec_transactions",
                             "ziyutec_caching",
                             "ziyutec_workflow_agent",
                             "ziyutec_rag",
                         ]
-                    }
+                    },
+                    projects={
+                        "resume_builder": ["resume_builder_agent", "resume_builder_hitl"],
+                        "mini_vllm": ["vllm_engine", "vllm_scheduler"],
+                    },
                 ),
             )
 
@@ -54,21 +66,31 @@ class SelectionTests(unittest.TestCase):
             self.service.validate_selection(
                 self.profile,
                 self.library,
-                ResumeSelection(experience={"ziyutec_marketplace": ["ziyutec_sdlc"]}),
+                ResumeSelection(
+                    experience={"ziyutec": ["ziyutec_sdlc"]},
+                    projects={
+                        "resume_builder": ["resume_builder_agent", "resume_builder_hitl"],
+                        "mini_vllm": ["vllm_engine", "vllm_scheduler"],
+                    },
+                ),
             )
 
-    def test_invalid_selection_raises_for_too_many_project_entries(self) -> None:
+    def test_invalid_selection_raises_for_too_few_project_entries(self) -> None:
         with self.assertRaises(SelectionValidationError):
             self.service.validate_selection(
                 self.profile,
                 self.library,
                 ResumeSelection(
-                    experience={"ziyutec_marketplace": ["ziyutec_sdlc", "ziyutec_rbac"]},
+                    experience={
+                        "ziyutec": [
+                            "ziyutec_sdlc",
+                            "ziyutec_rbac",
+                            "ziyutec_rag",
+                            "ziyutec_auth",
+                        ]
+                    },
                     projects={
-                        "mini_vlm": ["vlm_model"],
-                        "mini_vllm": ["vllm_engine"],
-                        "goodline_inventory": ["inventory_system"],
-                        "resume_builder": ["resume_builder_agent"],
+                        "resume_builder": ["resume_builder_agent", "resume_builder_hitl"],
                     },
                 ),
             )

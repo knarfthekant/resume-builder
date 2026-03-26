@@ -40,9 +40,16 @@ def build_prompt(
             project_lines.append(f"  {_format_option_line(option)}")
 
     return (
-        "You are selecting resume content for a job application.\n"
-        "Choose bullet IDs from the provided inventory, keep claims truthful, and only rewrite bullets when it materially helps alignment.\n"
+        "You are selecting resume content given the job description to maximize the chance of getting an interview.\n"
+        "Choose bullet IDs from the provided inventory, keep claims truthful, and only rewrite bullets when it helps alignment and keyword matching.\n"
         "Do not invent companies, impact, or technologies.\n\n"
+        "Constraint checklist you must satisfy exactly:\n"
+        "- Only use provided entry ids and bullet ids.\n"
+        "- Select between the required min and max number of experience entries.\n"
+        "- Select between the required min and max number of project entries.\n"
+        "- For every selected entry, include at least its min bullet count and at most its max bullet count.\n"
+        "- Do not return empty bullet lists for an entry unless you intend that entry to be omitted.\n"
+        "- If the previous suggestion violated a constraint, correct it completely before answering.\n\n"
         f"Select between {profile.min_experience_entries} and {profile.max_experience_entries} experience entries.\n"
         f"Select between {profile.min_project_entries} and {profile.max_project_entries} project entries.\n\n"
         f"Job description:\n{job_description}\n\n"
