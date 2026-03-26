@@ -13,20 +13,25 @@ from prompt_toolkit.layout import ConditionalContainer, HSplit, Layout, VSplit, 
 from prompt_toolkit.layout.controls import BufferControl, FormattedTextControl
 
 from app.config import DEFAULT_CONFIG_PATH, load_config, save_config
+from app.compiler import LatexCompilationError
 from app.data_loader import list_relative_yaml_files
 from app.models import PipelineRequest
 from app.pipeline import run_generation
 
 MENU_ITEMS: list[tuple[str, str]] = [
     ("generate", "generate resume"),
+    ("edit_config", "edit config"),
+    ("exit", "exit"),
+]
+
+CONFIG_MENU_ITEMS: list[tuple[str, str]] = [
     ("profile", "select active profile"),
     ("bullets", "select bullets catalog"),
     ("compile", "toggle pdf compilation"),
     ("template_root", "edit template root"),
     ("data_root", "edit data root"),
     ("output_root", "edit output root"),
-    ("show", "show current config"),
-    ("exit", "exit"),
+    ("back", "back"),
 ]
 
 ANSI_RESET = "\x1b[0m"
@@ -146,6 +151,8 @@ class ResumeBuilderCLI:
         header = [*TITLE_ART, TITLE_RULE_LINE, ""]
         if self.mode == "menu":
             return "\n".join(header + self._render_menu_lines())
+        if self.mode == "config_menu":
+            return "\n".join(header + self._render_config_menu_lines())
         if self.mode == "choice":
             return "\n".join(header + self._render_choice_lines())
         if self.mode == "input":
@@ -189,15 +196,27 @@ class ResumeBuilderCLI:
         return "\n".join(styled_lines)
 
     def _render_menu_lines(self) -> list[str]:
-        config_box = self._box_lines("config", self.format_status().splitlines())
         action_lines = []
         for index, (_, label) in enumerate(MENU_ITEMS):
             prefix = "> " if index == self.selection_index else "  "
             action_lines.append(f"{prefix}{label}")
         action_box = self._box_lines("actions", action_lines)
-        return config_box + [""] + action_box + [
+        return action_box + [
             "",
             "keys: up/down or j/k move, enter select, q quit",
+            f"status: {self.notice}",
+        ]
+
+    def _render_config_menu_lines(self) -> list[str]:
+        config_box = self._box_lines("current config", self.format_status().splitlines())
+        action_lines = []
+        for index, (_, label) in enumerate(CONFIG_MENU_ITEMS):
+            prefix = "> " if index == self.selection_index else "  "
+            action_lines.append(f"{prefix}{label}")
+        action_box = self._box_lines("edit config", action_lines)
+        return config_box + [""] + action_box + [
+            "",
+            "keys: up/down or j/k move, enter select, esc back",
             f"status: {self.notice}",
         ]
 
@@ -251,8 +270,16 @@ class ResumeBuilderCLI:
     def move_selection(self, delta: int) -> None:
         if self.mode == "menu":
             self.selection_index = (self.selection_index + delta) % len(MENU_ITEMS)
+        elif self.mode == "config_menu":
+            self.selection_index = (self.selection_index + delta) % len(CONFIG_MENU_ITEMS)
         elif self.mode == "choice" and self.choice_items:
             self.selection_index = (self.selection_index + delta) % len(self.choice_items)
+        self._invalidate()
+
+    def enter_config_menu(self) -> None:
+        self.mode = "config_menu"
+        self.selection_index = 0
+        self._focus_main()
         self._invalidate()
 
     def enter_choice_mode(self, action: str, title: str, items: list[str], current: str) -> None:
@@ -296,6 +323,21 @@ class ResumeBuilderCLI:
         self._focus_main()
         self._invalidate()
 
+    def reset_to_config_menu(self, notice: str | None = None) -> None:
+        self.mode = "config_menu"
+        self.choice_action = None
+        self.choice_title = ""
+        self.choice_items = []
+        self.choice_current = ""
+        self.input_field = None
+        self.input_title = ""
+        self.message_title = ""
+        self.message_body = ""
+        if notice is not None:
+            self.notice = notice
+        self._focus_main()
+        self._invalidate()
+
     def activate_current_menu_item(self) -> bool:
         action = MENU_ITEMS[self.selection_index][0]
         if action == "generate":
@@ -304,9 +346,18 @@ class ResumeBuilderCLI:
             except Exception as exc:  # noqa: BLE001
                 self.open_message("generation failed", str(exc))
             return True
+        if action == "edit_config":
+            self.enter_config_menu()
+            return True
+        if action == "exit":
+            return False
+        raise ValueError(f"Unknown action: {action}")
+
+    def activate_current_config_menu_item(self) -> None:
+        action = CONFIG_MENU_ITEMS[self.selection_index][0]
         if action == "profile":
             self.enter_choice_mode("profile", "select profile", self.list_profiles(), self.config.active_profile)
-            return True
+            return
         if action == "bullets":
             self.enter_choice_mode(
                 "bullets",
@@ -314,20 +365,18 @@ class ResumeBuilderCLI:
                 self.list_bullets_catalogs(),
                 self.config.active_bullets_catalog,
             )
-            return True
+            return
         if action == "compile":
             current = "true" if self.config.compile_pdf else "false"
             self.enter_choice_mode("compile", "toggle pdf compilation", ["true", "false"], current)
-            return True
+            return
         if action in {"template_root", "data_root", "output_root"}:
             self.enter_input_mode(action, f"edit {action}")
-            return True
-        if action == "show":
-            self.open_message("current config", self.format_status())
-            return True
-        if action == "exit":
-            return False
-        raise ValueError(f"Unknown action: {action}")
+            return
+        if action == "back":
+            self.reset_to_menu("back to main menu")
+            return
+        raise ValueError(f"Unknown config action: {action}")
 
     def apply_current_choice(self) -> None:
         if not self.choice_items or self.choice_action is None:
@@ -336,38 +385,39 @@ class ResumeBuilderCLI:
         selected = self.choice_items[self.selection_index]
         if self.choice_action == "profile":
             self.set_active_profile(selected)
-            self.reset_to_menu(f"profile set to {selected}")
+            self.reset_to_config_menu(f"profile set to {selected}")
             return
         if self.choice_action == "bullets":
             self.set_active_bullets_catalog(selected)
-            self.reset_to_menu(f"bullets set to {selected}")
+            self.reset_to_config_menu(f"bullets set to {selected}")
             return
         if self.choice_action == "compile":
             self.set_compile_pdf(selected == "true")
-            self.reset_to_menu(f"compile pdf set to {selected}")
+            self.reset_to_config_menu(f"compile pdf set to {selected}")
             return
         raise ValueError(f"Unknown choice action: {self.choice_action}")
 
     def submit_input(self, value: str) -> None:
         if self.input_field is None:
-            self.reset_to_menu()
+            self.reset_to_config_menu()
             return
         cleaned = value.strip()
         if not cleaned:
-            self.reset_to_menu("no change applied")
+            self.reset_to_config_menu("no change applied")
             return
         self.update_path(self.input_field, cleaned)
-        self.reset_to_menu(f"{self.input_field} updated")
+        self.reset_to_config_menu(f"{self.input_field} updated")
 
     def _build_key_bindings(self) -> KeyBindings:
         bindings = KeyBindings()
 
-        menu_or_choice = Condition(lambda: self.mode in {"menu", "choice"})
+        menu_or_choice = Condition(lambda: self.mode in {"menu", "config_menu", "choice"})
         menu_mode = Condition(lambda: self.mode == "menu")
+        config_menu_mode = Condition(lambda: self.mode == "config_menu")
         choice_mode = Condition(lambda: self.mode == "choice")
         input_mode = Condition(lambda: self.mode == "input")
         message_mode = Condition(lambda: self.mode == "message")
-        overlay_mode = Condition(lambda: self.mode in {"choice", "input", "message"})
+        overlay_mode = Condition(lambda: self.mode in {"choice", "input"})
         non_input_mode = Condition(lambda: self.mode != "input")
 
         @bindings.add("up", filter=menu_or_choice)
@@ -387,6 +437,11 @@ class ResumeBuilderCLI:
             if not self.activate_current_menu_item():
                 event.app.exit()
 
+        @bindings.add("enter", filter=config_menu_mode)
+        def _enter_config_menu(event) -> None:
+            del event
+            self.activate_current_config_menu_item()
+
         @bindings.add("enter", filter=choice_mode)
         def _enter_choice(event) -> None:
             del event
@@ -405,7 +460,17 @@ class ResumeBuilderCLI:
         @bindings.add("escape", filter=overlay_mode)
         def _escape(event) -> None:
             del event
-            self.reset_to_menu("cancelled")
+            self.reset_to_config_menu("cancelled")
+
+        @bindings.add("escape", filter=config_menu_mode)
+        def _escape_config(event) -> None:
+            del event
+            self.reset_to_menu("back to main menu")
+
+        @bindings.add("escape", filter=message_mode)
+        def _escape_message(event) -> None:
+            del event
+            self.reset_to_menu("back to main menu")
 
         @bindings.add("q", filter=non_input_mode)
         def _quit(event) -> None:
@@ -482,14 +547,17 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.command == "generate":
-        result = run_generation(
-            PipelineRequest(
-                profile_name=args.profile,
-                bullets_catalog_name=args.bullets,
-                job_description=args.job_description,
-                compile_pdf=False if args.no_compile else None,
+        try:
+            result = run_generation(
+                PipelineRequest(
+                    profile_name=args.profile,
+                    bullets_catalog_name=args.bullets,
+                    job_description=args.job_description,
+                    compile_pdf=False if args.no_compile else None,
+                )
             )
-        )
+        except LatexCompilationError as exc:
+            parser.exit(1, f"{exc}\n")
         print(f"Output directory: {result.output_dir}")
         print(f"Rendered LaTeX: {result.rendered_main}")
         if result.pdf_path:

@@ -1,5 +1,6 @@
 Activating conda environment:
 ```bash
+conda create -n resume python=3.12
 conda activate resume
 ```
 

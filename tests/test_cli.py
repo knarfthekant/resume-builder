@@ -64,7 +64,7 @@ class CliTests(unittest.TestCase):
     def test_render_text_shows_minimal_header(self) -> None:
         cli = ResumeBuilderCLI()
         rendered = cli.render_text()
-        self.assertIn("resume builder", rendered)
+        self.assertIn("by Frank Shan", rendered)
         self.assertIn("actions", rendered)
 
 
