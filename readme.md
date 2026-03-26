@@ -13,3 +13,11 @@ Run the CLI:
 resume-builder generate
 resume-builder cli
 ```
+
+Interactive CLI keys:
+```text
+up/down or j/k : move
+enter          : select or save
+esc            : go back
+q              : quit
+```

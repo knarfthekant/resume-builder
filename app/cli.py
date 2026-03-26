@@ -3,18 +3,56 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from prompt_toolkit.shortcuts import input_dialog, message_dialog, radiolist_dialog
+from prompt_toolkit.application import Application
+from prompt_toolkit.buffer import Buffer
+from prompt_toolkit.document import Document
+from prompt_toolkit.filters import Condition
+from prompt_toolkit.key_binding import KeyBindings
+from prompt_toolkit.layout import ConditionalContainer, HSplit, Layout, VSplit, Window
+from prompt_toolkit.layout.controls import BufferControl, FormattedTextControl
 
 from app.config import DEFAULT_CONFIG_PATH, load_config, save_config
 from app.data_loader import list_relative_yaml_files
 from app.models import PipelineRequest
 from app.pipeline import run_generation
 
+MENU_ITEMS: list[tuple[str, str]] = [
+    ("generate", "generate resume"),
+    ("profile", "select active profile"),
+    ("bullets", "select bullets catalog"),
+    ("compile", "toggle pdf compilation"),
+    ("template_root", "edit template root"),
+    ("data_root", "edit data root"),
+    ("output_root", "edit output root"),
+    ("show", "show current config"),
+    ("exit", "exit"),
+]
+
 
 class ResumeBuilderCLI:
     def __init__(self, config_path: Path = DEFAULT_CONFIG_PATH) -> None:
         self.config_path = config_path
         self.config = load_config(config_path)
+
+        self.mode = "menu"
+        self.selection_index = 0
+        self.notice = "ready"
+
+        self.choice_action: str | None = None
+        self.choice_title = ""
+        self.choice_items: list[str] = []
+        self.choice_current = ""
+
+        self.input_field: str | None = None
+        self.input_title = ""
+        self.input_buffer = Buffer()
+
+        self.message_title = ""
+        self.message_body = ""
+
+        self.application: Application[None] | None = None
+        self.body_window: Window | None = None
+        self.input_window: Window | None = None
 
     def reload(self) -> None:
         self.config = load_config(self.config_path)
@@ -24,13 +62,13 @@ class ResumeBuilderCLI:
 
     def format_status(self) -> str:
         return (
-            f"Config file: {self.config_path}\n"
-            f"Template root: {self.config.template_root}\n"
-            f"Data root: {self.config.data_root}\n"
-            f"Output root: {self.config.output_root}\n"
-            f"Active profile: {self.config.active_profile}\n"
-            f"Active bullets: {self.config.active_bullets_catalog}\n"
-            f"Compile PDF: {'yes' if self.config.compile_pdf else 'no'}"
+            f"config file : {self.config_path}\n"
+            f"template    : {self.config.template_root}\n"
+            f"data        : {self.config.data_root}\n"
+            f"output      : {self.config.output_root}\n"
+            f"profile     : {self.config.active_profile}\n"
+            f"bullets     : {self.config.active_bullets_catalog}\n"
+            f"compile pdf : {'yes' if self.config.compile_pdf else 'no'}"
         )
 
     def list_profiles(self) -> list[str]:
@@ -80,90 +118,300 @@ class ResumeBuilderCLI:
         )
         pdf_text = str(result.pdf_path) if result.pdf_path else "not generated"
         return (
-            "Generation succeeded.\n\n"
-            f"Output directory: {result.output_dir}\n"
-            f"Rendered LaTeX: {result.rendered_main}\n"
-            f"PDF: {pdf_text}"
+            f"output directory : {result.output_dir}\n"
+            f"rendered latex   : {result.rendered_main}\n"
+            f"pdf              : {pdf_text}"
         )
 
-    def prompt_action(self) -> str | None:
-        return radiolist_dialog(
-            title="Resume Builder",
-            text=self.format_status(),
-            values=[
-                ("generate", "Generate resume"),
-                ("profile", "Select active profile"),
-                ("bullets", "Select bullets catalog"),
-                ("compile", "Toggle PDF compilation"),
-                ("template_root", "Edit template root"),
-                ("data_root", "Edit data root"),
-                ("output_root", "Edit output root"),
-                ("show", "Show current config"),
-                ("exit", "Exit"),
-            ],
-        ).run()
+    def render_text(self) -> str:
+        header = [
+            "resume builder",
+            "==============",
+            "",
+        ]
+        if self.mode == "menu":
+            return "\n".join(header + self._render_menu_lines())
+        if self.mode == "choice":
+            return "\n".join(header + self._render_choice_lines())
+        if self.mode == "input":
+            return "\n".join(header + self._render_input_lines())
+        if self.mode == "message":
+            return "\n".join(header + self._render_message_lines())
+        return "\n".join(header + ["unknown mode"])
 
-    def prompt_choice(self, title: str, values: list[str], current: str) -> str | None:
-        options = [(value, value) for value in values]
-        return radiolist_dialog(title=title, text=f"Current: {current}", values=options).run()
+    def _render_menu_lines(self) -> list[str]:
+        lines = [
+            "config",
+            *[f"  {line}" for line in self.format_status().splitlines()],
+            "",
+            "actions",
+        ]
+        for index, (_, label) in enumerate(MENU_ITEMS):
+            prefix = "> " if index == self.selection_index else "  "
+            lines.append(f"{prefix}{label}")
+        lines.extend(
+            [
+                "",
+                "keys: up/down or j/k move, enter select, q quit",
+                f"status: {self.notice}",
+            ]
+        )
+        return lines
 
-    def prompt_text(self, title: str, current: str) -> str | None:
-        return input_dialog(title=title, text="Enter a new value:", default=current).run()
+    def _render_choice_lines(self) -> list[str]:
+        lines = [
+            self.choice_title,
+            "-" * len(self.choice_title),
+            f"current: {self.choice_current}",
+            "",
+        ]
+        for index, item in enumerate(self.choice_items):
+            prefix = "> " if index == self.selection_index else "  "
+            lines.append(f"{prefix}{item}")
+        lines.extend(["", "keys: up/down or j/k move, enter choose, esc back"])
+        return lines
 
-    def show_message(self, title: str, text: str) -> None:
-        message_dialog(title=title, text=text).run()
+    def _render_input_lines(self) -> list[str]:
+        current_value = ""
+        if self.input_field:
+            current_value = str(getattr(self.config, self.input_field))
+        return [
+            self.input_title,
+            "-" * len(self.input_title),
+            f"current: {current_value}",
+            "",
+            "type a new value below",
+            "keys: enter save, esc back",
+        ]
 
-    def handle_action(self, action: str) -> bool:
+    def _render_message_lines(self) -> list[str]:
+        return [
+            self.message_title,
+            "-" * len(self.message_title),
+            *self.message_body.splitlines(),
+            "",
+            "keys: enter back, q quit",
+        ]
+
+    def _set_notice(self, value: str) -> None:
+        self.notice = value
+        self._invalidate()
+
+    def _invalidate(self) -> None:
+        if self.application is not None:
+            self.application.invalidate()
+
+    def _focus_main(self) -> None:
+        if self.application is not None and self.body_window is not None:
+            self.application.layout.focus(self.body_window)
+
+    def _focus_input(self) -> None:
+        if self.application is not None and self.input_window is not None:
+            self.application.layout.focus(self.input_window)
+
+    def move_selection(self, delta: int) -> None:
+        if self.mode == "menu":
+            self.selection_index = (self.selection_index + delta) % len(MENU_ITEMS)
+        elif self.mode == "choice" and self.choice_items:
+            self.selection_index = (self.selection_index + delta) % len(self.choice_items)
+        self._invalidate()
+
+    def enter_choice_mode(self, action: str, title: str, items: list[str], current: str) -> None:
+        self.mode = "choice"
+        self.choice_action = action
+        self.choice_title = title
+        self.choice_items = items
+        self.choice_current = current
+        self.selection_index = items.index(current) if current in items else 0
+        self._focus_main()
+        self._invalidate()
+
+    def enter_input_mode(self, field_name: str, title: str) -> None:
+        self.mode = "input"
+        self.input_field = field_name
+        self.input_title = title
+        current = str(getattr(self.config, field_name))
+        self.input_buffer.set_document(Document(text=current, cursor_position=len(current)), bypass_readonly=True)
+        self._focus_input()
+        self._invalidate()
+
+    def open_message(self, title: str, body: str) -> None:
+        self.mode = "message"
+        self.message_title = title
+        self.message_body = body
+        self._focus_main()
+        self._invalidate()
+
+    def reset_to_menu(self, notice: str | None = None) -> None:
+        self.mode = "menu"
+        self.choice_action = None
+        self.choice_title = ""
+        self.choice_items = []
+        self.choice_current = ""
+        self.input_field = None
+        self.input_title = ""
+        self.message_title = ""
+        self.message_body = ""
+        if notice is not None:
+            self.notice = notice
+        self._focus_main()
+        self._invalidate()
+
+    def activate_current_menu_item(self) -> bool:
+        action = MENU_ITEMS[self.selection_index][0]
         if action == "generate":
-            self.show_message("Resume Builder", self.generate_resume())
+            try:
+                self.open_message("generation complete", self.generate_resume())
+            except Exception as exc:  # noqa: BLE001
+                self.open_message("generation failed", str(exc))
             return True
         if action == "profile":
-            selected = self.prompt_choice("Select Profile", self.list_profiles(), self.config.active_profile)
-            if selected:
-                self.set_active_profile(selected)
+            self.enter_choice_mode("profile", "select profile", self.list_profiles(), self.config.active_profile)
             return True
         if action == "bullets":
-            selected = self.prompt_choice(
-                "Select Bullets Catalog",
+            self.enter_choice_mode(
+                "bullets",
+                "select bullets catalog",
                 self.list_bullets_catalogs(),
                 self.config.active_bullets_catalog,
             )
-            if selected:
-                self.set_active_bullets_catalog(selected)
             return True
         if action == "compile":
-            selected = self.prompt_choice(
-                "Compile PDF",
-                ["true", "false"],
-                "true" if self.config.compile_pdf else "false",
-            )
-            if selected is not None:
-                self.set_compile_pdf(selected == "true")
+            current = "true" if self.config.compile_pdf else "false"
+            self.enter_choice_mode("compile", "toggle pdf compilation", ["true", "false"], current)
             return True
         if action in {"template_root", "data_root", "output_root"}:
-            current_value = str(getattr(self.config, action))
-            entered = self.prompt_text(f"Edit {action}", current_value)
-            if entered:
-                self.update_path(action, entered)
+            self.enter_input_mode(action, f"edit {action}")
             return True
         if action == "show":
-            self.show_message("Current Config", self.format_status())
+            self.open_message("current config", self.format_status())
             return True
         if action == "exit":
             return False
         raise ValueError(f"Unknown action: {action}")
 
+    def apply_current_choice(self) -> None:
+        if not self.choice_items or self.choice_action is None:
+            self.reset_to_menu()
+            return
+        selected = self.choice_items[self.selection_index]
+        if self.choice_action == "profile":
+            self.set_active_profile(selected)
+            self.reset_to_menu(f"profile set to {selected}")
+            return
+        if self.choice_action == "bullets":
+            self.set_active_bullets_catalog(selected)
+            self.reset_to_menu(f"bullets set to {selected}")
+            return
+        if self.choice_action == "compile":
+            self.set_compile_pdf(selected == "true")
+            self.reset_to_menu(f"compile pdf set to {selected}")
+            return
+        raise ValueError(f"Unknown choice action: {self.choice_action}")
+
+    def submit_input(self, value: str) -> None:
+        if self.input_field is None:
+            self.reset_to_menu()
+            return
+        cleaned = value.strip()
+        if not cleaned:
+            self.reset_to_menu("no change applied")
+            return
+        self.update_path(self.input_field, cleaned)
+        self.reset_to_menu(f"{self.input_field} updated")
+
+    def _build_key_bindings(self) -> KeyBindings:
+        bindings = KeyBindings()
+
+        menu_or_choice = Condition(lambda: self.mode in {"menu", "choice"})
+        menu_mode = Condition(lambda: self.mode == "menu")
+        choice_mode = Condition(lambda: self.mode == "choice")
+        input_mode = Condition(lambda: self.mode == "input")
+        message_mode = Condition(lambda: self.mode == "message")
+        overlay_mode = Condition(lambda: self.mode in {"choice", "input", "message"})
+        non_input_mode = Condition(lambda: self.mode != "input")
+
+        @bindings.add("up", filter=menu_or_choice)
+        @bindings.add("k", filter=menu_or_choice)
+        def _move_up(event) -> None:
+            del event
+            self.move_selection(-1)
+
+        @bindings.add("down", filter=menu_or_choice)
+        @bindings.add("j", filter=menu_or_choice)
+        def _move_down(event) -> None:
+            del event
+            self.move_selection(1)
+
+        @bindings.add("enter", filter=menu_mode)
+        def _enter_menu(event) -> None:
+            if not self.activate_current_menu_item():
+                event.app.exit()
+
+        @bindings.add("enter", filter=choice_mode)
+        def _enter_choice(event) -> None:
+            del event
+            self.apply_current_choice()
+
+        @bindings.add("enter", filter=input_mode)
+        def _enter_input(event) -> None:
+            del event
+            self.submit_input(self.input_buffer.text)
+
+        @bindings.add("enter", filter=message_mode)
+        def _enter_message(event) -> None:
+            del event
+            self.reset_to_menu()
+
+        @bindings.add("escape", filter=overlay_mode)
+        def _escape(event) -> None:
+            del event
+            self.reset_to_menu("cancelled")
+
+        @bindings.add("q", filter=non_input_mode)
+        def _quit(event) -> None:
+            event.app.exit()
+
+        @bindings.add("c-c")
+        def _ctrl_c(event) -> None:
+            event.app.exit()
+
+        return bindings
+
+    def _build_application(self) -> Application[None]:
+        body_control = FormattedTextControl(lambda: self.render_text())
+        self.body_window = Window(content=body_control, always_hide_cursor=True)
+
+        input_prompt = Window(
+            content=FormattedTextControl(lambda: "value > "),
+            width=8,
+            dont_extend_width=True,
+            always_hide_cursor=True,
+        )
+        self.input_window = Window(content=BufferControl(buffer=self.input_buffer), height=1)
+
+        root = HSplit(
+            [
+                self.body_window,
+                ConditionalContainer(
+                    content=VSplit([input_prompt, self.input_window]),
+                    filter=Condition(lambda: self.mode == "input"),
+                ),
+            ]
+        )
+
+        return Application(
+            layout=Layout(root, focused_element=self.body_window),
+            key_bindings=self._build_key_bindings(),
+            full_screen=True,
+            mouse_support=False,
+        )
+
     def run(self) -> None:
-        while True:
-            self.reload()
-            action = self.prompt_action()
-            if action is None or action == "exit":
-                return
-            try:
-                if not self.handle_action(action):
-                    return
-            except Exception as exc:  # noqa: BLE001
-                self.show_message("Error", str(exc))
+        self.reload()
+        self.application = self._build_application()
+        self._focus_main()
+        self.application.run()
 
 
 def build_parser() -> argparse.ArgumentParser:
