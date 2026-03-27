@@ -1,0 +1,42 @@
+%% SECTION: Projects
+%% Variables:
+%%   projects - list of objects:
+%%     .name         - string: project name
+%%     .tech_stack   - string: e.g. "PyTorch, Transformers"
+%%     .link_url     - string (optional): URL to repo/writeup
+%%     .link_label   - string (optional): e.g. "github"
+%%     .highlights   - list of strings: bullet points
+\section{Projects}
+
+    \hspace{0.5em} \textbf{Mini VLM} \textbar \  \textit{Python, PyTorch}
+\hfill \textit{\href{https://github.com/knarfthekant/mini-vlm}{github}}
+    \vspace{0.10 cm}
+    \begin{onecolentry}
+        \begin{highlights}
+            \item Built a LLaVA-style Vision-Language Model, integrating SigLIP-2 with Qwen3-0.6B via a modality projector, achieving 32.9 percent zero-shot MMStar accuracy under a 1B parameter constraint.
+            \item Optimized training stability and memory usage via gradient checkpointing, mixed precision, and custom dataset pipelines, enabling efficient training on consumer GPUs.
+        \end{highlights}
+    \end{onecolentry}
+    \vspace{0.10 cm}
+
+    \hspace{0.5em} \textbf{Mini VLLM} \textbar \  \textit{Python, PyTorch}
+\hfill \textit{\href{https://github.com/knarfthekant/mini-vllm}{github}}
+    \vspace{0.10 cm}
+    \begin{onecolentry}
+        \begin{highlights}
+            \item Built a lightweight LLM inference engine with continuous batching, request scheduling, and paged KV-cache architecture for efficient memory management.
+            \item Implemented a custom scheduler and block manager to coordinate sequence execution and KV memory allocation, improving GPU utilization under concurrent workloads.
+        \end{highlights}
+    \end{onecolentry}
+    \vspace{0.10 cm}
+
+    \hspace{0.5em} \textbf{Snapplot} \textbar \  \textit{React Native, Expo, TypeScript}
+\hfill \textit{\href{https://github.com/and-yliu/snapplot}{github}}
+    \vspace{0.10 cm}
+    \begin{onecolentry}
+        \begin{highlights}
+            \item Built a real-time multiplayer system using WebSockets (Socket.io) to synchronize game state, player actions, and timed reveal events across clients with low-latency updates.
+        \end{highlights}
+    \end{onecolentry}
+    \vspace{0.10 cm}
+

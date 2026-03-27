@@ -95,6 +95,28 @@ class SelectionTests(unittest.TestCase):
                 ),
             )
 
+    def test_render_context_strips_leading_bullet_markers(self) -> None:
+        selection = ResumeSelection(
+            summary_id="ai_automation",
+            experience={
+                "ziyutec": [
+                    "ziyutec_sdlc",
+                    "ziyutec_system_design",
+                    "ziyutec_rbac",
+                    "ziyutec_rag",
+                ]
+            },
+            projects={
+                "mini_vllm": ["vllm_engine", "vllm_scheduler"],
+                "mini_vlm": ["vlm_model", "vlm_training_pipeline"],
+            },
+            rewrites={"ziyutec_sdlc": "- Built an end-to-end marketplace platform."},
+        )
+
+        context = SelectionApplier().build_render_context(self.profile, self.library, selection)
+
+        self.assertEqual(context["experience"][0]["highlights"][0], "Built an end-to-end marketplace platform.")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -42,6 +42,7 @@ def build_prompt(
     return (
         "You are selecting resume content given the job description to maximize the chance of getting an interview.\n"
         "Choose bullet IDs from the provided inventory, keep claims truthful, and only rewrite bullets when it helps alignment and keyword matching.\n"
+        "Rewriting must conform to the original format (LaTeX). No special characters or formatting like (%, leading -, *)\n"
         "Do not invent companies, impact, or technologies.\n\n"
         "Constraint checklist you must satisfy exactly:\n"
         "- Only use provided entry ids and bullet ids.\n"

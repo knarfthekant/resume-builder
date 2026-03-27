@@ -1,0 +1,44 @@
+AI Generation Summary
+=====================
+
+profile: profiles/general.yaml
+library: bullets/general.yaml
+job description: Responsibilities of the Role: Design, implement, and optimize machine learning models and algorithms to enhance AI-driven gameplay and content creation/recommendation systems. Develop and maintain core AI tools, libraries, and infrastructure components supporting the end-to-end ML lifecycle from data processing to model deployment. Design and implement cloud-based solutions using AWS, GCP, or Azure to support scalable, high-performance machine learning workloads. Optimize performance, scalability, and cost efficiency of AI systems and deployed models in production environments. Document and present findings through technical reports, demos, and presentations to internal stakeholders. Contribute to knowledge sharing through internal publications, open-source engagement, or research initiatives where applicable. Technical Qualifications: Currently enrolled in a Bachelor’s or Master’s degree program in a related field. Foundation in machine learning, deep learning, and data-driven system design. Proficiency in Python, with experience in deep learning frameworks such as PyTorch Familiarity with cloud platforms (AWS, GCP, or Azure) and cloud-native tools (e.g., Docker). Experience deploying and managing machine learning models in real-time interactive applications. Solid understanding of computer science fundamentals, including algorithms, data structures, and software design principles
+
+summary
+  id: ai_automation
+  text: Engineer focused on AI systems and automation, building retrieval, agentic workflows, and developer tooling that integrate LLMs with reliable backend infrastructure and measurable outcomes.
+
+experience
+  Software Developer Intern @ Ziyutec Inc. (ziyutec)
+    - ziyutec_search: Built a low latency search system with hybrid lexical and vector retrieval and ranking, enabling automated resource discovery and recommendation workflows.
+      why: Directly matches recommendation systems, retrieval, and AI-driven product workflows.
+    - ziyutec_rag: Built a production-grade RAG system over 1,000+ enterprise documents, leveraging hybrid search, reranking, and context-aware chunking to optimize retrieval quality, improving faithfulness and contextual relevance by 16 percent (DeepEval).
+      why: Strong ML and retrieval keyword fit; shows production optimization and evaluation.
+    - ziyutec_file_pipeline: Engineered direct-to-object-storage uploads for large assets using AWS S3 presigned URLs; implemented end-to-end integrity validation (local and cloud checksum verification) to ensure data consistency at scale.
+      why: Supports cloud infrastructure and scalable systems experience with AWS.
+    - ziyutec_workflow_agent: Developed a workflow automation agent that orchestrates database queries and form submission via structured tool use, reducing manual operational workload by 20 percent across a 50-person team.
+      why: Shows AI-driven tooling and automation, relevant to internal tools and infrastructure.
+  Research Assistant @ University of Waterloo (uw_research)
+    - research_neurosymbolic: Designed experiments for a probabilistic programming system (PAL) compiling symbolic constraints into tensor operations, enabling neuro-symbolic training with strict structural guarantees.
+      why: Highlights machine learning research and model design foundations.
+    - research_ner_constraints: Built a hybrid NER pipeline combining frozen language model embeddings with constraint-based decoding, improving prediction validity and early-stage training stability.
+      why: Relevant for deep learning, constrained inference, and data-driven model design.
+
+projects
+  Mini VLM (mini_vlm)
+    - vlm_model: Built a LLaVA-style Vision-Language Model, integrating SigLIP-2 with Qwen3-0.6B via a modality projector, achieving 32.9 percent zero-shot MMStar accuracy under a 1B parameter constraint.
+      why: Strongest direct ML and deep learning project; includes PyTorch-adjacent model building.
+    - vlm_efficiency: Optimized training stability and memory usage via gradient checkpointing, mixed precision, and custom dataset pipelines, enabling efficient training on consumer GPUs.
+      why: Demonstrates model optimization and efficient training systems.
+  Mini VLLM (mini_vllm)
+    - vllm_engine: Built a lightweight LLM inference engine with continuous batching, request scheduling, and paged KV-cache architecture for efficient memory management.
+      why: Relevant to model deployment, inference performance, and production optimization.
+    - vllm_scheduler: Implemented a custom scheduler and block manager to coordinate sequence execution and KV memory allocation, improving GPU utilization under concurrent workloads.
+      why: Shows systems-level optimization for high-performance ML workloads.
+  Snapplot (snapplot)
+    - snapplot_multiplayer: Built a real-time multiplayer system using WebSockets (Socket.io) to synchronize game state, player actions, and timed reveal events across clients with low-latency updates.
+      why: Relevant to real-time interactive applications and backend systems.
+
+notes
+  Selected 2 experience entries and 3 project entries to maximize alignment with ML, retrieval, inference, cloud, and real-time systems keywords while keeping claims faithful to the source bullets.

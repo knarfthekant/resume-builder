@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict
+import re
 
 from app.models import BulletLibrary, BulletOption, ResumeProfile, ResumeSelection
 
@@ -168,10 +169,13 @@ class SelectionApplier:
         rewrites: dict[str, str],
     ) -> list[str]:
         option_map = {option.id: option for option in options}
-        return [rewrites.get(bullet_id) or option_map[bullet_id].text for bullet_id in selected_ids]
+        return [self._normalize_highlight_text(rewrites.get(bullet_id) or option_map[bullet_id].text) for bullet_id in selected_ids]
 
     def _find_option(self, options: list[BulletOption], option_id: str) -> BulletOption:
         for option in options:
             if option.id == option_id:
                 return option
         raise SelectionValidationError(f"Unknown summary option: {option_id}")
+
+    def _normalize_highlight_text(self, text: str) -> str:
+        return re.sub(r"^\s*[-*•]+\s*", "", text).strip()
