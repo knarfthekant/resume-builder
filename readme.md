@@ -4,6 +4,8 @@ AI-assisted resume generation for LaTeX resumes built with Python, Jinja2, and a
 
 This project renders resume templates from structured YAML data, compiles them with `latexmk`, and supports an AI review loop that maps a job description to bullet selections before generation.
 
+![Resume Builder CLI](./assets/resume_builder.png)
+
 ## Features
 
 - Render LaTeX resumes from modular Jinja2 templates under `templates/resume/`
